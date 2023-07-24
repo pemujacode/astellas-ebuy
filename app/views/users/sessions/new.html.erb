@@ -1,0 +1,43 @@
+<h4>Log in <% if Rails.env.test? %>  'Tes' <%  end  %>   </h4>
+
+<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <%= f.error_notification %>
+  <div class="form-group form-group-default">
+    <label>Login</label>
+    <div class="controls">
+     <%= f.text_field :email,
+                required: true,
+                autofocus: true,
+                input_html: { autocomplete: "email" }, :class =>'form-control', :placeholder => 'E-mail'   %>
+    </div>
+  </div>
+
+
+  <div class="form-group form-group-default">
+    <label>Password</label>
+    <div class="controls">
+     <%= f.password_field :password,
+                required: false,
+                input_html: { autocomplete: "current-password" }, :class =>'form-control', :placeholder => 'Password' %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 no-padding sm-p-l-10">
+      <div class="controls">
+        <%= f.check_box :remember_me, :value =>'true', :id =>'checkbox1' , as: :boolean if devise_mapping.rememberable?    %>
+Remember Me      
+</div>
+    </div>
+  </div>
+
+  <br>
+  <div class="form-actions">
+    <%= f.button :submit, "Log in", :class => 'class="btn btn-primary btn-cons m-t-10"' %>
+
+  </div>
+<% end %>
+
+
+
+

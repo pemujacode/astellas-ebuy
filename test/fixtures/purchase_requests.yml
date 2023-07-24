@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  'no': MyString
+  user: one
+  requester: MyString
+  request_date: 2020-01-11
+  required_date: 2020-01-11
+  notes: MyString
+
+two:
+  'no': MyString
+  user: two
+  requester: MyString
+  request_date: 2020-01-11
+  required_date: 2020-01-11
+  notes: MyString

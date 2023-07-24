@@ -1,0 +1,73 @@
+
+<div class="card-body">
+
+ <% if department.errors.any? %>
+        <% department.errors.full_messages.each do |message| %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="close" data-dismiss="alert"></button>
+                <strong>Error: </strong><%=  message %>
+              </div>
+        <% end %>
+  <% end %>
+
+  <%= simple_form_for @department,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+ 
+
+  <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Department</label>
+    <div class="col-md-9">
+      <%= f.text_field :name , class: 'form-control', placeholder: 'Department Name',required: true %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Default Cost Center</label>
+    <div class="col-md-9">
+      <select class="full-width" data-init-plugin="select2" placeholder = "Cost Center" name="department[costcenter_id]" id="department_costcenter_id">
+        <% @costcenters = Costcenter.all
+          @costcenters.each do |costcenter| %>
+          <option value="<%= costcenter.id %>"><%= costcenter.code %> | <%= costcenter.name %></option>
+          <% end %>
+
+           <% unless department.costcenter_id.nil? %>
+
+            <option selected="selected"><%=  department.costcenter.code + ' | ' + department.costcenter.name %></option>
+       
+           <% end %>
+ 
+      </select>
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Default Expense</label>
+    <div class="col-md-9">
+   
+      <select class="full-width" data-init-plugin="select2" placeholder = "Expense Type" name="department[expense_id]" id="department_expense_id">
+        <% @expenses = Expense.order('code asc').all
+          @expenses.each do |expense| %>
+          <option value="<%= expense.id %>"><%= expense.code %> | <%= expense.name %></option>
+        <% end %>
+
+      </select>
+    </div>
+  </div>
+  <br>
+  <div class="actions">
+       <%= f.submit 'submit' , :class => 'btn btn-primary btn-cons'  %>
+     </div>
+  
+  <br>
+
+</form>
+ 
+
+     <% end %>  
+
+
+
+</div>
+
+
+

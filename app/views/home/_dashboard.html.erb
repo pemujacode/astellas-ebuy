@@ -1,0 +1,403 @@
+<% content_for(:html_title) { 'Home - Dashboard' } %>
+
+<!-- DASHBOARD START LEFT SECTION -->
+
+
+<!-- START PR DASHBOARD-->
+   <!-- Your PR -->
+   <% if current_user.role == 'Admin' %>
+     <% @purchase_requests = PurchaseRequest.all.order('id DESC') %>
+   <% else %>
+    <% @purchase_requests = PurchaseRequest.find_by_sql("SELECT * FROM purchase_requests WHERE req_email ='" + current_user.email + "' or pic ='" + current_user.name + "' order by id desc") %>
+   <% end %>
+   
+   <% if @purchase_requests.any?  %>
+
+
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header ">
+          <h5 class="text-complete pull-left fs-12">Your / Requester Purchase Request <i class="fa fa-circle text-complete fs-11"></i></h5>
+          
+          <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+          <table class="table table-hover table-responsive-block" id="tableWithSearch">
+           <thead>
+             <tr>
+              <th>No.</th>
+              <th>Requester</th>
+              <th>Req. Date</th>
+              <th>Item</th>
+              <th>Status</th>
+              
+           
+                 
+           
+
+             </tr>
+           </thead>
+           <tbody>
+             <% 
+             #@purchase_requests = PurchaseRequest.all
+            
+             @purchase_requests.each do |purchase_request| %>
+             <tr>
+             
+              <td class="v-align-middle semi-bold">
+              <%= link_to purchase_request.id, edit_purchase_request_path(purchase_request) %> 
+              </td>
+              <td class="v-align-middle"><%= purchase_request.requester %></td>
+              <td class="v-align-middle"><%= purchase_request.request_date %></td>
+              
+              <td class="v-align-middle"><%= purchase_request.item %></td>
+              <td class="v-align-middle"><%= purchase_request.status %></td>
+             
+
+              
+              
+
+        
+            
+             
+             </tr>
+              <% end %>
+           </tbody>
+         </table>
+        </div>
+      </div>
+   <% end %>
+
+  <% if current_user.role == 'Admin' %>
+     <% @purchase_requests = PurchaseRequest.find_by_sql("SELECT * FROM purchase_requests WHERE  status NOT IN ('Rejected','Approved') order by id desc ") %>
+
+   <% else %>
+  <% @purchase_requests = PurchaseRequest.find_by_sql("SELECT * FROM purchase_requests WHERE (approval1 ='" + current_user.email + "' or approval2 ='" + current_user.email + "' or approval3 ='" + current_user.email + "' or approval4 ='" + current_user.email + "' or pic='" + current_user.name + "') and status NOT IN ('Rejected','Approved') order by id desc ") %>
+  <% end %>
+
+   <% if @purchase_requests.any?  %>
+
+      <!-- PR Approval -->
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header clearfix">
+          <h5 class="text-success pull-left fs-12">Outstanding PR Approval <i
+        class="fa fa-circle text-success fs-11"></i></h5>
+         
+          <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+         
+            <table class="table table-hover table-responsive-block" id="tableWithSearch">
+             <thead>
+               <tr>
+                <th>PR No.</th>
+                <th>Requester</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Action</th>
+             
+
+               </tr>
+             </thead>
+             <tbody>
+               <% 
+            
+               @purchase_requests.each do |purchase_request| %>
+               <tr>
+               
+                <td class="v-align-middle semi-bold">
+                <%= link_to purchase_request.id, edit_purchase_request_path(purchase_request) %> 
+                </td>
+                <td class="v-align-middle"><%= purchase_request.requester %></td>
+                <td class="v-align-middle"><%= purchase_request.request_date %></td>
+                
+                <td class="v-align-middle"><%= purchase_request.status %></td>
+                 <td class="v-align-middle"><%= link_to(" View", edit_purchase_request_path(purchase_request)) %> </td>
+              
+               
+               </tr>
+                <% end %>
+             </tbody>
+           </table>
+          
+        </div>
+      </div>
+
+  <% end %>
+
+
+<!-- END PR DASHBOARD -->
+
+
+  <!-- START PO Dashboard-->
+  <% if current_user.role == 'Admin' %>
+
+<% @purchase_orders = PurchaseOrder.all.order('id DESC') %>
+    
+    <% else %>
+<% @purchase_orders = PurchaseOrder.where(prepared_by: current_user.email).order('id DESC') %>
+<% end %>
+<% if @purchase_orders.any?  %>
+  <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+    <div class="card-header ">
+      <h5 class="text-complete pull-left fs-12">Your Purchase Order <i class="fa fa-circle text-complete fs-11"></i></h5>
+      
+      <div class="clearfix"></div>
+    </div>
+    <div class="card-description">
+      <table class="table table-hover table-responsive-block" id="tableWithSearch">
+        
+       <thead>
+         <tr>
+          <th>Web PO No.</th>
+          <th>SAP PO No.</th>
+          <th>Supplier</th>
+          <th>PO Date</th>
+          <th>Prepared by</th>
+          <th>Status</th>
+          
+       
+             
+       
+
+         </tr>
+       </thead>
+       <tbody>
+         
+         <%
+         
+         @purchase_orders.each do |purchase_order| %>
+         <tr>
+         
+          <td class="v-align-middle semi-bold">
+          <%= link_to purchase_order.id, edit_purchase_order_path(purchase_order) %> 
+          </td>
+          <td class="v-align-middle"><%= purchase_order.sapno %></td>
+
+          <td class="v-align-middle"><%= purchase_order.supplier %></td>
+          <td class="v-align-middle"><%= purchase_order.po_date %></td>
+          
+          <td class="v-align-middle"><%= purchase_order.prepared_by %></td>
+          <td class="v-align-middle"><%= purchase_order.status %></td>
+         
+
+          
+          
+
+    
+        
+         
+         </tr>
+          <% end %>
+       </tbody>
+     </table>
+    </div>
+    
+  </div>
+ <% end %> 
+
+
+  <% if current_user.role == 'Admin' %>
+  <% @purchase_orders = PurchaseOrder.find_by_sql("SELECT * FROM purchase_orders WHERE status NOT IN ('Approved','Rejected','Closed') order by id DESC")
+%>
+
+
+  <% else %>
+
+<% @purchase_orders = PurchaseOrder.find_by_sql("SELECT * FROM purchase_orders WHERE (approved_by ='" + current_user.email + "' or reviewed_by ='" + current_user.email + "'"") and status NOT IN ('Approved','Rejected','Closed') order by id DESC")
+%>
+<% end %>
+<% if @purchase_orders.any?  %>
+  <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+    <div class="card-header clearfix">
+      <h5 class="text-success pull-left fs-12">Outstanding PO Approval <i
+    class="fa fa-circle text-success fs-11"></i></h5>
+     
+      <div class="clearfix"></div>
+    </div>
+    <div class="card-description">
+     
+        <table class="table table-hover table-responsive-block" id="tableWithSearch">
+         <thead>
+           <tr>
+            <th>PO Web No.</th>
+            <th>SAP PO No.</th>
+            <th>Prepared By</th>
+            <th>Supplier</th>
+            <th>Status</th>
+            <th>Action</th>
+         
+
+           </tr>
+         </thead>
+         <tbody>
+           <% 
+         
+
+           @purchase_orders.each do |purchase_order| %>
+           <tr>
+           
+            <td class="v-align-middle semi-bold">
+            <%= link_to purchase_order.id, edit_purchase_order_path(purchase_order) %> 
+            </td>
+            <td class="v-align-middle"><%= purchase_order.sapno %></td>
+
+            <td class="v-align-middle"><%= purchase_order.prepared_by %></td>
+            <td class="v-align-middle"><%= purchase_order.supplier %></td>
+            
+            <td class="v-align-middle"><%= purchase_order.status %></td>
+             <td class="v-align-middle"><%= link_to(" View", edit_purchase_order_path(purchase_order)) %>  </td>
+            
+
+      
+          
+           
+           </tr>
+            <% end %>
+         </tbody>
+       </table>
+      
+    </div>
+    
+  </div>
+  <% end %>
+
+<!-- END PO Dashboard-->
+
+
+<!-- START VIPR Dashboard-->
+<% if current_user.role == 'Admin' %>
+<% @viprs = Vipr.order('id ASC').all %>
+
+<% else %>
+<% @viprs = Vipr.find_by_sql("SELECT * FROM viprs WHERE req_email ='" + current_user.email + "' or pic ='" + current_user.name + "' order by id DESC") %>
+<% end %>
+
+<% if @viprs.any?  %>
+  
+
+  <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+    <div class="card-header ">
+      <h5 class="text-complete pull-left fs-12">Your Payment Request <i class="fa fa-circle text-complete fs-11"></i></h5>
+      
+      <div class="clearfix"></div>
+    </div>
+    <div class="card-description">
+      <table class="table table-hover table-responsive-block" id="tableWithSearch">
+       <thead>
+         <tr>
+          <th>No.</th>
+          <th>SAP GRN No.</th>
+          <th>Supplier</th>
+          <th>Date</th>
+          <th>Prepared by</th>
+          <th>Status</th>
+          
+       
+             
+       
+
+         </tr>
+       </thead>
+       <tbody>
+         <% 
+         #@purchase_requests = PurchaseRequest.all
+         
+         @viprs.each do |vipr| %>
+         <tr>
+         
+          <td class="v-align-middle semi-bold">
+          <%= link_to vipr.id, edit_vipr_path(vipr) %> 
+          </td>
+          <td class="v-align-middle"><%= vipr.sapno %></td>
+
+          <td class="v-align-middle"><%= vipr.supplier %></td>
+          <td class="v-align-middle"><%= vipr.invoice_date %></td>
+          
+          <td class="v-align-middle"><%= vipr.requester %></td>
+          <td class="v-align-middle"><%= vipr.status %></td>
+         
+
+          
+          
+
+    
+        
+         
+         </tr>
+          <% end %>
+       </tbody>
+     </table>
+    </div>
+    
+  </div>
+  <% end %>
+
+
+  <% if current_user.role == 'Admin' %>
+
+  <% @viprs = Vipr.find_by_sql("SELECT * FROM viprs WHERE status NOT IN ('Approved','Rejected') order by id ")
+   %>
+
+<% else %>
+   <% 
+#    @viprs = Vipr.find_by_sql("SELECT * FROM viprs WHERE (approval1 ='" + current_user.email + "' or approval2 ='" + current_user.email + "' or approval3 ='" + current_user.email + "' or approval4 ='" + current_user.email + "' or pic='" + current_user.name + "') and status NOT IN ('Approved','Rejected') order by id DESC")
+ @viprs = Vipr.find_by_sql("SELECT * FROM viprs WHERE (
+      (approval1 ='" + current_user.email + "' and apv_date1 is null) or (approval2 ='" + current_user.email + "' and apv_date2 is null)
+       or (approval3 ='" + current_user.email + "' and apv_date3 is null) or (approval4 ='" + current_user.email + "' and apv_date4 is null) or pic='" + current_user.name + "') and status NOT IN ('Approved','Rejected') order by id DESC")
+   %>
+
+   <% end %>
+
+   <% if @viprs.any?  %>
+     <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+    <div class="card-header clearfix">
+      <h5 class="text-success pull-left fs-12">Outstanding Payment Request Approval <i
+    class="fa fa-circle text-success fs-11"></i></h5>
+     
+      <div class="clearfix"></div>
+    </div>
+    <div class="card-description">
+     
+        <table class="table table-hover table-responsive-block" id="tableWithSearch">
+
+         <thead>
+           <tr>
+            <th>VIPR No.</th>
+            <th>Requester</th>
+            <th>Supplier</th>
+            <th>Status</th>
+            <th>Action</th>
+         
+
+           </tr>
+         </thead>
+         <tbody>
+           <% @viprs.each do |vipr| %>
+           <tr>
+           
+            <td class="v-align-middle semi-bold">
+            <%= link_to vipr.id, edit_vipr_path(vipr) %> 
+            </td>
+            <td class="v-align-middle"><%= vipr.requester %></td>
+            <td class="v-align-middle"><%= vipr.supplier %></td>
+            
+            <td class="v-align-middle"><%= vipr.status %></td>
+             <td class="v-align-middle"><%= link_to(" View", edit_vipr_path(vipr)) %> </td>
+            
+
+      
+          
+           
+           </tr>
+            <% end %>
+         </tbody>
+       </table>
+      
+    </div>
+    
+     </div>
+   <% end %>
+
+<!-- END VIPR Dashboard-->
+
+

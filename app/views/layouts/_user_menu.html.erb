@@ -1,0 +1,60 @@
+ <% if current_user.department_id == 7 %>
+<li>
+  <a href="javascript:;"><span class="title">Master Data</span>
+    <span class=" arrow"></span></a>
+    <ul class="">
+      <li class="">
+        <%= link_to "Currency", currencies_path  %>
+      </li>
+      <li class="">
+        <%= link_to "Cost Center", costcenters_path  %>
+      </li>
+      <li class="">
+        <%= link_to "Expense", expenses_path %>
+      </li>
+      <li class="">
+        <%= link_to "Department", departments_path %>
+      </li>
+      <li class="">
+        <%= link_to "Supplier", suppliers_path %>
+      </li>
+     
+  </ul>
+</li>
+<% end %>
+
+<li>
+  <a href="javascript:;"><span class="title">Transactions</span>
+  <span class=" arrow"></span></a>
+  <ul class="">
+    <li class="">
+      <%= link_to "Purchase Request", purchase_requests_path  %>
+    </li>
+     <% if current_user.department_id == 7 %>
+        <li class="">
+           <%= link_to "Purchase Order", purchase_orders_path  %>
+        </li>
+      <% end %>
+
+    <li class="">
+      <%= link_to "Payment Request", viprs_path  %>
+    </li>
+    
+  </ul>
+</li>
+<li>
+   <a href="javascript:;"><span class="title">Reports</span>
+  <span class=" arrow"></span></a>
+  <ul class="">
+    <li class="">
+      <%= link_to "Purchase Request Report", pr_reports_path  %>
+    </li>
+    <li class="">
+      <%= link_to "Purchase Order Report", po_reports_path  %>
+    </li>
+     <li class="">
+      <%= link_to "Payment Request Report", vipr_reports_path  %>
+    </li>
+     
+  </ul>
+</li>  

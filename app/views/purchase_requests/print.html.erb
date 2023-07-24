@@ -1,0 +1,323 @@
+
+<% content_for(:html_title) { 'Pur. Request - View : No. ' + @purchase_request.id.to_s + ' | Status : ' + @purchase_request.status } %>
+
+<div class=" container    container-fixed-lg">
+  <div class="card card-default m-t-20">
+    <div class="card-body">
+     <div class="invoice padding-50 sm-padding-10">
+
+
+      <!-- HEADER SECTION -->  
+      <div>
+        <div class="pull-left">
+           <%= image_tag 'logo.png', alt: '', style: 'height:20%;width:20%;' %>
+          <address class="m-t-10">
+            <b>PT. Astellas Pharma Indonesia</b><br>
+            Plaza Oleos , 5th Floor Jl. TB Simatupang No. 53A, <br>
+            Jakarta Selatan 12520 Jakarta - Indonesia<br>
+            <i class="fa fa-phone"></i> Tel: +621-227-80171 , Fax: +621-227-80180
+            <br>
+          </address>
+        </div>
+        <div class="pull-right sm-m-t-20">
+          <h2 class="all-caps hint-text">Purchase Request</h2>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <br>
+      <br>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-lg-9 col-sm-height sm-no-padding">
+            <p><strong>Requester : </strong> </p>  <%= @purchase_request.requester %> | <%= @purchase_request.account %>
+            <br>
+            <br><p><strong>Department : </strong> </p> <%= @purchase_request.department %>
+            <br>
+            <br><p><strong>Allocation : </strong> </p> <%= @purchase_request.allocation %>
+            <br>
+            <br><p><strong>Apv. GRoup : </strong> </p> <%= @purchase_request.approval_group %>
+
+            
+        </div>
+
+        <div class="col-lg-3 sm-no-padding sm-p-b-20 d-flex align-items-end justify-content-between">
+        <div>
+        <div class="bold all-caps">PR No :</div>
+        <div class="bold all-caps">PR date :</div>
+        <div class="bold all-caps">Del. date :</div>
+        <div class="bold all-caps">Req. Type :</div>
+        <div class="bold all-caps">Status :</div>
+        
+        <div class="clearfix"></div>
+        </div>
+        <div class="text-right">
+        <div class=""># <%= @purchase_request.id %> </div>
+        <div class=""><%= @purchase_request.request_date.strftime('%d/%m/%Y') %></div>
+        <div class=""><%= @purchase_request.required_date.strftime('%d/%m/%Y') %></div>
+        <div class="">
+          <% if (@purchase_request.is_newgoods == true )  %>
+            New Goods
+          <% else %>
+            Re-Order Goods
+          <% end %>
+
+        </div>
+        <div class=""><%= @purchase_request.status %> </div>
+        
+        <div class="clearfix"></div>
+        </div>
+        </div>
+        </div>
+      </div>
+
+      <hr>
+      <br>
+      <br>
+
+      <!-- ITEM SECTION -->
+      
+      <div class="table-responsive table-invoice">
+         <div>
+        <p><strong>A. Item Information :</strong></p>
+      </div>
+
+    
+      <table class="table m-t-50">
+      <thead>
+        <tr>
+          <th class="">Item / Service</th>
+          <th class="">Purpose</th>
+          <th class="text-right">Qty</th>
+          <th class="text-right">Price</th>
+          <th class="text-right">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="">
+            <p class="text-black"><%= @purchase_request.costcenter %> - <%= @purchase_request.item %></p>
+            <p class="small hint-text">
+            <%= @purchase_request.detail %>
+            </p>
+          </td>
+          <td class="text-black"><%= @purchase_request.purpose %></td>
+          <td class="text-right"><%= number_with_delimiter(@purchase_request.quantity , separator: ",", delimiter: ".") %></td>
+          <td class="text-right"><%= number_to_currency(@purchase_request.price, unit: "Rp. ", separator: ",", delimiter: ".") %></td>
+          <td class="text-right"><%= number_to_currency(@purchase_request.quantity * @purchase_request.price, unit: "Rp. ", separator: ",", delimiter: ".") %> </td>
+        </tr>
+
+      </tbody>
+      </table>
+      </div>
+
+
+      <br>
+      <br>
+      <!-- SUPPLIER SECTION -->
+      <div>
+        <p><strong>B. Supplier Information :</strong></p>
+      </div>
+       <br>
+      <div class="">Proposed Supplier : <%= @purchase_request.supplier %> </div>
+      <div class="">Reason : <%= @purchase_request.supplier_reason %> </div>
+
+
+      <br>
+      <br>
+      <br>
+
+      <!-- APPROVAL SECTION -->
+      <div>
+        <p><strong>C. Authority Review & Approval :</strong></p>
+      </div>
+      <div class="table-responsive table-invoice">
+          <table class="table m-t-50">
+          <thead>
+          <tr>
+            <th class="">Name</th>
+            <th class="">Title</th>
+            <th class="">Status</th>
+            <th class="">Date</th>
+          </tr>
+          </thead>
+          <tbody>
+            <% unless (@purchase_request.approval1.nil? || @purchase_request.approval1 == '')   %>
+          <tr>
+            <td class=""><p class="text-black">Reviewed By :
+              <%= unless @purchase_request.approval1.nil? || @purchase_request.approval1 == '' then
+                User.find_by(email: @purchase_request.approval1).name end %></p>
+            </td>
+            <td class=""><p class="text-black">
+              <%= unless @purchase_request.approval1.nil? || @purchase_request.approval1 == '' then User.find_by(email: @purchase_request.approval1).title end %>  </p>
+            </td>
+
+            <td class="">
+            <p class="text-black">
+               <% if (@purchase_request.apv_date1.nil? || @purchase_request.apv_date1 == '')  %>
+                  <% if @purchase_request.approval1.nil? || @purchase_request.approval1 == '' %>
+                  
+                   <% else %>
+                      Not Approved
+                   <% end %>  
+               <% else %>
+                  Approved
+               <% end %>
+
+            </p>
+            </td>
+            
+
+            <td class="">
+            <p class="text-black"><%= unless @purchase_request.apv_date1.nil? || @purchase_request.approval1 == '' then @purchase_request.apv_date1.strftime('%d/%m/%Y - %T') end %> </p>
+            </td>
+          </tr>
+          <% end %>
+
+          <% unless (@purchase_request.approval2.nil? || @purchase_request.approval2 == '')   %>
+          <tr>
+            <td class=""><p class="text-black">Approval : <%= unless @purchase_request.approval2.nil? || @purchase_request.approval2 != '' then User.find_by(email: @purchase_request.approval2).name end %></p>
+            </td>
+            <td class=""><p class="text-black"><%= unless @purchase_request.approval2.nil? || @purchase_request.approval2 != '' then User.find_by(email: @purchase_request.approval2).title end %> </p>
+            </td>
+
+            <td class="">
+            <p class="text-black">
+               <% if (@purchase_request.apv_date2.nil? || @purchase_request.apv_date2 == '')  %>
+                  <% if @purchase_request.approval2.nil? || @purchase_request.approval2 == '' %>
+                  
+                   <% else %>
+                      Not Approved
+                   <% end %>  
+               <% else %>
+                  Approved
+               <% end %>
+
+            </p>
+            </td>
+            
+            <td class="">
+            <p class="text-black"><%= unless @purchase_request.apv_date2.nil? || @purchase_request.approval2 != '' then @purchase_request.apv_date2.strftime('%d/%m/%Y - %T') end %> </p>
+            </td>
+          </tr>
+          <% end %>
+
+          <% unless (@purchase_request.approval3.nil? || @purchase_request.approval3 == '')   %>
+            <tr>
+              <td class=""><p class="text-black">Approval : <%= unless @purchase_request.approval3.nil? || @purchase_request.approval3 == '' then User.find_by(email: @purchase_request.approval3).name end %> </p>
+              </td>
+              <td class=""><p class="text-black"><%=  unless @purchase_request.approval3.nil? || @purchase_request.approval3 == '' then User.find_by(email: @purchase_request.approval3).title end %> </p>
+              </td>
+
+              <td class="">
+              <p class="text-black">
+                 <% if (@purchase_request.apv_date3.nil? || @purchase_request.apv_date3 == '')  %>
+                    <% if @purchase_request.approval3.nil? || @purchase_request.approval3 == '' %>
+                    
+                     <% else %>
+                        Not Approved
+                     <% end %>  
+                 <% else %>
+                    Approved
+                 <% end %>
+
+              </p>
+              </td>
+              <td class="">
+              <p class="text-black"><%= unless @purchase_request.approval3.nil? || @purchase_request.approval3 == ''  then @purchase_request.apv_date3.strftime('%d/%m/%Y - %T') end %>  </p>
+              </td>
+            </tr>
+          <% end %>
+          
+          <% unless (@purchase_request.approval4.nil? || @purchase_request.approval4 == '')   %>
+          <tr>
+            <td class=""><p class="text-black">Final Approval : <%= unless @purchase_request.approval4.nil? || @purchase_request.approval4 == ''  then User.find_by(email: @purchase_request.approval4).name end %></p>
+            </td>
+            <td class=""><p class="text-black"><%= unless @purchase_request.approval4.nil? || @purchase_request.approval4 == ''  then User.find_by(email: @purchase_request.approval4).title end %> </p>
+            </td>
+
+            <td class="">
+            <p class="text-black">
+
+                <% if (@purchase_request.apv_date4.nil? || @purchase_request.apv_date4 == '')  %>
+                  <% if @purchase_request.approval4.nil? || @purchase_request.approval4 == '' %>
+                  
+                   <% else %>
+                      Not Approved
+                   <% end %>  
+               <% else %>
+                  Approved
+               <% end %>
+
+            </p>
+            </td>
+            
+
+            <td class="">
+            <p class="text-black"><%= unless @purchase_request.apv_date4.nil?  then @purchase_request.apv_date4.strftime('%d/%m/%Y - %T') end %> </p>
+            </td>
+          </tr>
+          <% end %>
+
+
+
+          </tbody>
+          </table>
+      </div>
+      <br>
+      <br>
+      <br>
+
+
+      <!-- PIC SECTION -->
+      <div>
+        <p><strong>D. Procurement PIC :</strong></p>
+      </div>
+      <br>
+      <div class="">PIC : <%= @purchase_request.pic %> </div>
+      
+      
+
+
+
+      <br>
+      <hr>
+      <!-- FOOTER SECTION -->
+      <p class="small hint-text">THIS IS A COMPUTERISED PURCHASE REQUEST, SIGNATURE IS NOT REQUIRED</p>
+
+      <br>
+
+      </div>
+     </div>
+    </div>
+     <%= link_to 'Edit', edit_purchase_request_path(@purchase_request), :class => 'btn btn-complete btn-cons' %> 
+     <%= link_to 'Back', purchase_requests_path, :class => 'btn btn-complete btn-cons' %>
+     <% 
+     @purchase_requests = PurchaseRequest.find_by_sql("SELECT * FROM purchase_requests WHERE (approval1 ='" + current_user.email + "' or approval2 ='" + current_user.email + "' or approval3 ='" + current_user.email + "' or approval4 ='" + current_user.email + "') and id=" + @purchase_request.id.to_s  + " and status NOT IN ('Draft','Approved') ")
+     
+     %>
+     
+     <% if @purchase_requests.any?  %> 
+        <%= link_to(" Approve", edit_purchase_request_path(@purchase_request, :status => "Approved") , :class => 'btn btn-success btn-cons' , data: { confirm: 'Are you sure to Approve this Purchase Request ? Please save after Approve this document'} )  %>
+
+     <% end %>
+
+
+     <% 
+     @purchase_requests = PurchaseRequest.find_by_sql("SELECT * FROM purchase_requests WHERE req_email ='" + current_user.email + "' and id=" + @purchase_request.id.to_s + " and status = 'Draft' ")
+     
+     %>
+     
+     <% if @purchase_requests.any?  %> 
+      <%= link_to(" Release", edit_purchase_request_path(@purchase_request, :status => "Released") , :class => 'btn btn-success btn-cons' , data: { confirm: 'Are you sure to Release this Purchase Request ? Please save after Release this document'})  %>
+     <% end %>
+
+
+     <%= link_to "PRINT", '#', onclick: "printpage()", :class => 'btn btn-complete btn-cons'  %>
+
+  </div>
+
+ 
+</div>
+
+
+

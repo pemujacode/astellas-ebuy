@@ -1,0 +1,277 @@
+
+<% content_for(:html_title) { 'Pur. Order - View : No. ' + @purchase_order.id.to_s + ' | Status : ' + @purchase_order.status } %>
+
+<div class=" container    container-fixed-lg">
+  <div class="card card-default m-t-20">
+    <div class="card-body">
+     <div class="invoice padding-50 sm-padding-10">
+
+
+      <!-- HEADER SECTION -->  
+      <div>
+
+        <div class="pull-left">
+           <%= image_tag 'logo.png', alt: '', style: 'height:20%;width:20%;' %>
+          <address class="m-t-10">
+            <b>PT. Astellas Pharma Indonesia</b><br>
+            Plaza Oleos , 5th Floor Jl. TB Simatupang No. 53A, <br>
+            Jakarta Selatan 12520 Jakarta - Indonesia<br>
+            <i class="fa fa-phone"></i> Tel: +621-227-80171 , Fax: +621-227-80180
+            <br>
+          </address>
+        </div>
+      </div>
+        <br>
+        <br>
+
+
+        <table width="100%">
+          <tr>
+            <th width='10%'></th>
+            <th width='40%'></th>
+            <th width='7%'></th>
+            <th width='8%'></th>
+            <th width='15%'></th>
+          </tr>
+          <tr>
+            <td class="bold">To</td>
+            <td class="bold"> : <%= @purchase_order.supplier %></td>
+            <td></td>
+            <td class="bold">PO No.</td>
+            <td class="bold"> : #<%= @purchase_order.sapno %></td>
+          </tr>
+          <tr>
+            <td>Address</td>
+            <td> : <%= @purchase_order.address %></td>
+            <td></td>
+             <td>Date</td>
+            <td> : <% if @purchase_order.po_date.nil? %>
+                  <%= @purchase_order.po_date %>
+                <% else %>
+                  <%= @purchase_order.po_date.strftime('%d/%m/%Y') %>
+                <% end %></td>
+          </tr>
+          <tr>
+            <td>Attention</td>
+            <td> : <%= @purchase_order.attn %></td>
+            <td></td>
+             <td>Order By</td>
+            <td> : <%= @purchase_order.buyer %></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+             <td>Currency</td>
+            <td> : <%= @purchase_order.currency %></td>
+          </tr>
+        </table>
+
+
+ 
+
+
+     
+      <br>
+ 
+
+      <!-- ITEM SECTION -->
+       <div class="sm-m-t-20">
+          <hr>
+          <h2 class="all-caps hint-text"><center>Purchase Order</center></h2>
+        </div>
+      
+      <div class="table-responsive table-invoice">
+         <div>
+       
+      </div>
+
+    
+      <table class="table m-t-50">
+      <thead>
+        <tr>
+          <th width="20%" class="">Description</th>
+          <th width="35%" class="">Spesification</th>
+          <th width="15%" class="" style="text-align:center;">Price</th>
+          <th width="10%" class="" style="text-align:center;">Qty</th>
+          <th width="20%" class="" style="text-align:center;">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @po_item.each do |po_item| %>
+        <tr>
+           <td class="v-align-left semi-bold"><%= po_item.description %></td>
+            <td class="v-align-left"><%= po_item.spesification %></td>
+            <td class="v-align-right" style="text-align:right;"><%= number_to_currency(po_item.price,  unit: "", precision: 2) %></td>
+            <td class="v-align-right" style="text-align:right;""><%= number_to_currency(po_item.quantity , unit: "", precision: 2) %></td>
+            <td class="v-align-right" style="text-align:right;"><%= number_to_currency(po_item.amount, unit: "", precision: 2) %></td>
+          </tr>
+          
+        <% end %>
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+         
+          <td style="text-align:left;">
+             <div class="bold">Sub Total :</div>
+          </td>
+           <td>
+          </td>
+          
+          <td class="v-align-right" style="text-align:right;""><%= number_to_currency(@purchase_order.total , unit: "",precision: 0 ) %></td>
+
+
+        </tr>
+         <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          
+          <td style="text-align:left;">
+             <div class="bold">VAT :</div>
+          </td>
+          <td>
+          </td>
+          
+          <div class="text-right">
+           <td style="text-align:right;"><%= number_to_currency(@purchase_order.vat , unit: "", precision:0 ) %></td>
+           </div>
+
+        </tr>
+         <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+         
+          <td style="text-align:left;">
+             <div class="bold">Total :</div>
+          </td>
+           <td>
+          </td>
+          
+          <div class="text-right">
+          <td class="v-align-right" style="text-align:right;"><%= number_to_currency(@purchase_order.grand_total, unit: "",precision: 0 ) %></td>
+           </div>
+
+        </tr>
+
+      </tbody>
+      </table>
+      </div>
+
+
+
+
+<br>
+      <br>
+      <!-- SUPPLIER SECTION -->
+      <div>
+        <% if  @purchase_order.currency == "USD" %>
+            <p><strong>In Words :</strong></p> <%= @purchase_order.grand_total.humanize.titleize %> US Dollar
+        <% else %>
+              <% if  @purchase_order.currency == "SGD" %>
+
+              <p><strong>In Words :</strong></p> <%= @purchase_order.grand_total.humanize.titleize %> Singapore Dollar
+
+
+
+              <% else %>
+                  <% if  @purchase_order.currency == "JPY" %>
+
+                 <p><strong>In Words :</strong></p> <%= @purchase_order.grand_total.humanize.titleize %> Japanesse Yen
+
+                    <% else %>
+
+                    <p><strong>In Words :</strong></p> <%= @purchase_order.grand_total.humanize.titleize %> Rupiah
+
+
+              <% end %>
+
+              <% end %>
+
+
+
+        
+        <% end %>
+            
+      </div>
+       <br>
+      <hr>
+
+      <table width="100%">
+          <tr>
+            <th width='20%'></th>
+            <th width='80%'></th>
+            
+          </tr>
+          <tr>
+            <td>Delivery Time</td>
+            <td> : <%= @purchase_order.delivery_date %></td>
+            
+          </tr>
+          <tr>
+            <td>Terms of Payment</td>
+            <td> : <%= @purchase_order.terms_payment %></td>
+           
+          </tr>
+           <tr>
+            <td>Remarks</td>
+            <td> : <%= @purchase_order.remarks %></td>
+           
+          </tr>
+          
+         
+        </table>
+
+      <br>
+      <br>
+
+    
+
+      <!-- PIC SECTION -->
+ 
+      <br>
+      <center>
+      
+      <u>Authorization for Purchase : </u>
+    
+     
+      <br>
+      <h2><%= @purchase_order.status %></h2>
+      <br>
+      <div class="rectangle">
+        <div id="rectangle" style="width:100%; height:120px; border-color:black; border-style:solid ">
+        This purchase order shall be governed by the Astellas Terms and Conditions of Purchase in force at the time of this purchase order, which can be found on the Astellas website <a href="https://www.astellas.com/im/procurement">https://www.astellas.com/im/procurement</a> by clicking on the link for the country from which Astellas issues this purchase order. Unless expressly incorporated into a written contract signed on behalf of the parties and expressly stated to prevail over the Astellas Terms and Conditions of Purchase, any terms and conditions of the supplier are hereby explicitly reject and do not apply to this transaction.
+      </div>
+      
+      <br>
+      <hr>
+      <!-- FOOTER SECTION -->
+      <p class="small hint-text"><CENTER>THIS IS AN ELECTRONIC GENERATED DOCUMENT, NO SIGNATURE IS REQUIRED</CENTER></p>
+
+      <br>
+      </center>
+
+      </div>
+     </div>
+    </div>
+     <%= link_to 'Edit', edit_purchase_order_path(@purchase_order), :class => 'btn btn-complete btn-cons' %> 
+       <%= link_to 'Back', url_for(:back)  , :class => 'btn btn-complete btn-cons' %>
+    
+     <%= link_to "PRINT", '#', onclick: "printpage()", :class => 'btn btn-complete btn-cons'  %>
+       
+
+     <br>
+     <br>
+
+  </div>
+
+
+
+
+
+

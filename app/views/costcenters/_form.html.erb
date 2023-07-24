@@ -1,0 +1,47 @@
+
+<div class="card-body">
+
+ <% if costcenter.errors.any? %>
+        <% costcenter.errors.full_messages.each do |message| %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="close" data-dismiss="alert"></button>
+                <strong>Error: </strong><%=  message %>
+              </div>
+        <% end %>
+  <% end %>
+
+  <%= simple_form_for @costcenter,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+ 
+
+  <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Cost Center Code</label>
+    <div class="col-md-9">
+      <%= f.text_field :code , class: 'form-control', placeholder: 'Cost Center Code',required: true %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Cost Center Name</label>
+    <div class="col-md-9">
+      <%= f.text_field :name , class: 'form-control', placeholder: 'Cost Center Name',required: true %>
+    </div>
+  </div>
+
+  
+  
+  <br>
+  <div class="actions">
+       <%= f.submit 'submit' , :class => 'btn btn-primary btn-cons'  %>
+     </div>
+  
+  <br>
+
+  </form>
+ 
+
+ <% end %>  
+
+
+
+</div>
+

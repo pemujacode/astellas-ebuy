@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  costcenter: MyString
+  currency: MyString
+  department: MyString
+  expense: MyString
+  supplier: MyString
+  p_request: MyString
+  p_order: MyString
+  p_grn: MyString
+
+two:
+  user: two
+  costcenter: MyString
+  currency: MyString
+  department: MyString
+  expense: MyString
+  supplier: MyString
+  p_request: MyString
+  p_order: MyString
+  p_grn: MyString

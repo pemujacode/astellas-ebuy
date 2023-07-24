@@ -1,0 +1,131 @@
+<% content_for(:html_title) { 'Purchase Request Approval - View' } %>
+
+
+<div class=" container    container-fixed-lg">
+  <div class="card card-default m-t-20">
+    <div class="card-body">
+     <div class="invoice padding-50 sm-padding-10">
+        <div class="card-body">
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Approval ID :</strong></label>
+            <div class="col-md-9">
+             <%= @pr_approval.id %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Requester :</strong></label>
+            <div class="col-md-9">
+             <%= @pr_approval.requester %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Reviewed By - Name : </strong></label>
+            <div class="col-md-9">
+             <%= @pr_approval.apv1 %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Reviewed By - Treshold :</strong></label>
+            <div class="col-md-9">
+              <%= @pr_approval.apv1_amount %>
+             
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Approval 2 - Name : </strong></label>
+            <div class="col-md-9">
+             <%= @pr_approval.apv2 %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Approval 2 - Treshold :</strong></label>
+            <div class="col-md-9">
+              <%= @pr_approval.apv2_amount %>
+             
+            </div>
+          </div>
+
+            <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Approval 3 - Name : </strong></label>
+            <div class="col-md-9">
+             <%= @pr_approval.apv3 %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Approval 3 - Treshold :</strong></label>
+            <div class="col-md-9">
+              <%= @pr_approval.apv3_amount %>
+             
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Approval 4 - Name : </strong></label>
+            <div class="col-md-9">
+             <%= @pr_approval.apv4 %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Approval 4 - Treshold :</strong></label>
+            <div class="col-md-9">
+              <%= @pr_approval.apv4_amount %>
+             
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>is Active : </strong></label>
+            <div class="col-md-9">
+              <%= @pr_approval.is_active %>
+            </div>
+          </div>
+
+
+            <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Procurement PIC : </strong></label>
+            <div class="col-md-9">
+              <%= @pr_approval.pic %>
+             
+            </div>
+          </div>
+
+
+
+          
+
+
+
+          <br>
+          <%= link_to 'Edit', edit_pr_approval_path(@pr_approval),:class => 'btn btn-complete btn-cons' %> 
+          <%= link_to 'Back', pr_approvals_path, :class => 'btn btn-complete btn-cons' %>
+          
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

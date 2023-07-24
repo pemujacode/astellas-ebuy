@@ -1,0 +1,2 @@
+class ViprReview < ApplicationRecord
+end

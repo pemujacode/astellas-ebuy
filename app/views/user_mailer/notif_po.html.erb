@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    Hi, <%= @email %>
+    <br>
+    <p>
+      You've got a Purchase Order No <%= @no %> from <%= @requester %> to be reviewed and approved by you
+    </p>
+    <p>You can access this purchase order through following URL: <%= link_to @no, @url %>. </p>
+    <br>
+
+    <p>Thanks and have a great day!</p>
+    <br>
+    <br>
+    
+
+    <p>=================================================================================</p>
+    <p>Notes : This is automatic email sent by PT Astellas Pharma Indonesia E-Buy System. No reply is required</p>
+
+
+  </body>
+</html>

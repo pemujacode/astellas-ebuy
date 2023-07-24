@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  'no': MyString
+  supplier: one
+  po_date: 2020-02-01
+  delivery_date: 2020-02-01
+  buyer: MyString
+  terms_payment: MyString
+  status: MyString
+  prepared_by: MyString
+  reviewed_by: MyString
+  total: 
+  vat: 
+  grand_total: 
+
+two:
+  'no': MyString
+  supplier: two
+  po_date: 2020-02-01
+  delivery_date: 2020-02-01
+  buyer: MyString
+  terms_payment: MyString
+  status: MyString
+  prepared_by: MyString
+  reviewed_by: MyString
+  total: 
+  vat: 
+  grand_total: 

@@ -1,0 +1,1466 @@
+
+
+
+<div class="card-body">
+
+ <% if vipr.errors.any? %>
+        <% vipr.errors.full_messages.each do |message| %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="close" data-dismiss="alert"></button>
+                <strong>Error: </strong><%=  message %>
+              </div>
+        <% end %>
+  <% end %>
+
+
+  <%= simple_form_for @vipr,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+  <div class="row">
+
+
+    <!-- START LEFT SECTION -->
+    <div class="col-sm-6 d-flex flex-column">
+    
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header ">
+          <h5 class="text-complete pull-left fs-12">Contents <i class="fa fa-circle text-complete fs-11"></i></h5>
+          
+          <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+
+        <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Document Source</label>
+            <div class="col-md-7">
+              <%= link_to 'PO', new_vipr_path(:source => 'PO') , :class => 'btn btn-primary btn-cons',disabled: (true unless @vipr.status.nil?)  %>
+              <%= link_to 'Non PO', new_vipr_path(:source => 'Non PO') , :class => 'btn btn-primary btn-cons', disabled: (true unless @vipr.status.nil?)  %>
+            </div>
+              <div class="col-md-2">
+              <%= f.text_field :source , disabled: true, class: 'form-control', placeholder: 'Source',:id => 'source'  %>
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Document Type</label>
+            <div class="col-md-7">
+              <% if params[:source] == 'PO' %>
+                <%= link_to 'Item', new_vipr_path(:doctype => 'Item',:source => 'PO') , :class => 'btn btn-primary btn-cons',disabled: (true unless @vipr.status.nil?)  %>
+                <%= link_to 'Service', new_vipr_path(:doctype => 'Service',:source => 'PO') , :class => 'btn btn-primary btn-cons', disabled: (true unless @vipr.status.nil?)  %>
+              <% else %>
+                <%= link_to 'Item', new_vipr_path(:doctype => 'Item',:source => 'Non PO') , :class => 'btn btn-primary btn-cons',disabled: (true unless @vipr.status.nil?)  %>
+                <%= link_to 'Service', new_vipr_path(:doctype => 'Service',:source => 'Non PO') , :class => 'btn btn-primary btn-cons', disabled: (true unless @vipr.status.nil?)  %>
+
+
+              <% end %>
+
+
+            </div>
+              <div class="col-md-2">
+              <%= f.text_field :doctype , disabled: true, class: 'form-control', placeholder: 'DocType' %>
+            </div>
+        </div>
+
+
+
+      
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">VIPR No</label>
+            <div class="col-md-9">
+              <%= f.text_field :id , disabled: true, class: 'form-control', placeholder: 'VIPR No' %>
+            </div>
+          </div>
+
+         
+           <div class="form-group row">
+            <label class="col-md-3 control-label">Supplier</label>
+            <div class="col-md-9">
+              <% if @vipr.status.nil?   %> 
+                  <select class="full-width" data-init-plugin="select2" placeholder = "Supplier" name="vipr[supplier]" id="supplier" onchange="getPO(this.value)">
+                 
+                    <% @suppliers = Supplier.where(is_active: 'true') 
+                      @suppliers.each do |supplier| %>
+                      <option value="<%= supplier.name %>"><%= supplier.name %></option>
+                      <% end %>
+
+                       <% unless @vipr.supplier.nil? %>
+
+                        <option selected="selected"><%=  @vipr.supplier %></option>
+                   
+                       <% end %>                      
+
+             
+                  </select>
+                <% else %>
+                  <select disabled="disabled" class="full-width" data-init-plugin="select2" placeholder = "Supplier" name="vipr[supplier]" id="supplier" 
+                   
+                      <% @suppliers = Supplier.where(is_active: 'true')
+                        @suppliers.each do |supplier| %>
+                        <option value="<%= supplier.name %>"><%= supplier.name %></option>
+                        <% end %>
+
+                         <% unless @vipr.supplier.nil? %>
+
+                          <option selected="selected"><%=  @vipr.supplier %></option>
+                     
+                         <% end %>                      
+
+               
+                    </select>
+
+                <% end %>
+
+            </div>
+          </div>
+
+          <% if  params[:source] == 'PO'    %>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">PO No:</label>
+            <div class="col-md-6">
+              <% if @vipr.status.nil?   %> 
+                <select  class="full-width" data-init-plugin="select2" placeholder = "PO No" name="vipr[po_no]" id="cbo_pono" onchange="CopyFromPO_JS(this.value)">
+                 
+                    
+                      <option value=""></option>
+                    
+                    
+
+                       <% unless vipr.po_no.nil? %>
+
+                          <option selected="selected"><%=  vipr.po_no %></option>
+
+                     
+
+                   
+                       <% end %>                      
+
+             
+                </select>
+              <% else %> 
+                 <select  class="full-width" data-init-plugin="select2" placeholder = "PO No" name="vipr[po_no]" disabled="disabled" id="cbo_pono" onchange="CopyFromPO_JS(this.value)">
+                   
+                      
+                        <option value=""></option>
+                      
+                      
+
+                         <% unless vipr.po_no.nil? %>
+
+                            <option selected="selected"><%=  vipr.po_no %></option>
+
+                       
+
+                     
+                         <% end %>                      
+
+               
+                  </select> 
+                  <% end %>
+
+
+
+            </div>
+             <div class="col-md-3">
+             
+                <% if @vipr.status.nil?  %>
+                      <%= link_to "Copy From PO","#" , class: 'btn btn-primary',  :onclick => "CallFromPO()"  %>
+                <% end %>
+     
+            </div>
+          </div>
+          <% end %>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Invoice No</label>
+            <div class="col-md-6">
+              <%= f.text_field :invoice_no , class: 'form-control', placeholder: 'Invoice No' ,disabled: (true unless @vipr.status.nil?) %>
+            </div>
+              <div class="col-md-3">
+              <%= f.text_field :invoice_date , id: 'datepicker-component', class: 'form-control', placeholder: 'DD/MM/YYYY',required: true, :'data-date-format' => 'dd-mm-yyyy' , disabled: (true unless @vipr.status.nil?) %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Pay Due Date</label>
+            <div class="col-md-9">
+              <%= f.text_field :due_date , id: 'datepicker-component', class: 'form-control', placeholder: 'DD/MM/YYYY',required: true, :'data-date-format' => 'dd/mm/yyyy', disabled: (true unless @vipr.status.nil?) %>
+            </div>
+          </div>
+
+
+
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Pay Doc. No.</label>
+            <div class="col-md-9">
+              <%= f.text_field :payment_no,  class: 'form-control', placeholder: 'Payment Doc. No' , disabled: (true unless @vipr.status.nil?) %>
+            </div>
+            
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-3 control-label">Currency</label>
+            <div class="col-md-9">
+              <% if @vipr.status.nil?   %> 
+              <select class="full-width" data-init-plugin="select2" placeholder = "Currency" name="vipr[currency]" id="currency" 
+             
+                <% @currencies = Currency.all
+                  @currencies.each do |currency| %>
+                  <option value="<%= currency.code %>"><%= currency.code %></option>
+                  <% end %>
+                
+
+                   <% unless vipr.currency.nil? %>
+
+                      <option selected="selected"><%=  vipr.currency %></option>
+
+                   <% else %>                      
+                      <option selected="selected">IDR</option>
+
+               
+                   <% end %>                      
+
+         
+              </select>
+              <% else %>
+
+                <select disabled="disabled" class="full-width" data-init-plugin="select2" placeholder = "Currency" name="vipr[currency]" id="currency" 
+               
+                  <% @currencies = Currency.all
+                    @currencies.each do |currency| %>
+                    <option value="<%= currency.code %>"><%= currency.code %></option>
+                    <% end %>
+                  
+
+                     <% unless vipr.currency.nil? %>
+
+                        <option selected="selected"><%=  vipr.currency %></option>
+
+                     <% else %>                      
+                        <option selected="selected">IDR</option>
+
+                 
+                     <% end %>                      
+
+           
+                </select>
+
+
+
+              <% end %>
+            </div>
+          </div>
+
+
+        <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Attachment</label>
+            <div class="col-md-9">
+              <%= f.file_field :attachment1  , class: 'form-control', placeholder: 'Remarks', multiple: true, disabled: (true unless @vipr.status.nil?) %>
+              
+                <% @vipr.attachment1.each do |attachment1| %>
+                <div><%= link_to attachment1.filename, attachment1 %></div>
+               
+              <% end %>
+
+
+             
+            </div>
+          </div>
+
+
+
+          
+  
+        </div>
+        
+      </div>
+    </div>
+    <!-- END LEFT SECTION -->
+
+
+   <!-- START RIGHT SECTION -->
+    <div class="col-sm-6  d-flex flex-column">
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header clearfix">
+          <h5 class="text-complete pull-left fs-12">Status and Approval <i class="fa fa-circle text-complete fs-11"></i></h5>
+        <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+          
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Status</label>
+            <div class="col-md-9">
+              <%= f.text_field :status , class: 'form-control', placeholder: 'Status' , :disabled =>true  %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Requester</label>
+            <div class="col-md-9">
+            <%= f.text_field :req_email ,  class: 'form-control', placeholder: 'Requester', :disabled =>true  %>
+
+            </div>
+          </div>
+<div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approval Group</label>
+             <div class="col-md-9">
+                <% if @vipr.status.nil?   %> 
+                  <select class="full-width" data-init-plugin="select2" placeholder = "Group" name="vipr[approval_group]" id="group" onchange="getGroup(this.value)">
+                 
+                     <% @approval = PrApproval.where(requester: current_user.email)
+                        @approval.each do |supplier| %>
+                        <option value="<%= supplier.approval_group %>"><%= supplier.approval_group %></option>
+                        <% end %>
+
+                         <% unless @vipr.approval_group.nil? %>
+
+                          <option selected="selected"><%=  @vipr.approval_group %></option>
+                     
+                         <% end %>                      
+
+             
+                  </select>
+                <% else %>
+                  <select disabled="disabled" class="full-width" data-init-plugin="select2" placeholder = "Group" name="vipr[approval_group]" id="group" 
+                   
+                      <% @approval = PrApproval.where(requester: current_user.email)
+                        @approval.each do |supplier| %>
+                        <option value="<%= supplier.approval_group %>"><%= supplier.approval_group %></option>
+                        <% end %>
+
+                         <% unless @vipr.approval_group.nil? %>
+
+                          <option selected="selected"><%=  @vipr.approval_group %></option>
+                     
+                         <% end %>                      
+
+               
+                    </select>
+
+                <% end %>
+              
+
+
+
+            </div>
+          </div>
+
+
+ <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Reviewed By</label>
+            <div class="col-md-6">
+              <%= f.text_field :approval1 , class: 'form-control', placeholder: 'Reviewed By' , :disabled =>true , :id => 'Approval1'  %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :apv_date1 , class: 'form-control', placeholder: 'Review Date' , :disabled =>true , :id => 'Approval1' %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approver - Level 1</label>
+            <div class="col-md-6">
+              <%= f.text_field :approval2 , class: 'form-control', placeholder: 'Approver - Level 1' , :disabled =>true, :id => 'Approval2'  %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :apv_date2 , class: 'form-control', placeholder: 'Approval Date' , :disabled =>true  , :id => 'Approval2' %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approver - Level 2</label>
+            <div class="col-md-6">
+              <%= f.text_field :approval3 , class: 'form-control', placeholder: 'Approver - Level 2' , :disabled =>true, :id => 'Approval3' %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :apv_date3 , class: 'form-control', placeholder: 'Approval Date' , :disabled =>true , :id => 'Approval3' %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approver - Final</label>
+            <div class="col-md-6">
+              <%= f.text_field :approval4 , class: 'form-control', placeholder: 'Approver - Final' , :disabled =>true, :id => 'Approval4'  %>
+            </div>
+            <div class="col-md-3">
+              <%= f.text_field :apv_date4 , class: 'form-control', placeholder: 'Approval Date' , :disabled =>true , :id => 'Approval4' %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Procurement PIC</label>
+            <div class="col-md-9">
+              <%= f.text_field :pic , class: 'form-control', placeholder: 'Procurement PIC' , :disabled =>true  %>
+            </div>
+            
+          </div>
+
+
+      
+
+        </div>
+      </div>
+    </div>
+    <!-- END RIGHT -->
+
+  </div>
+
+
+   <% if @vipr.status.nil?  %>
+      <button onclick="ResetVal(this.value)" class="btn btn-primary btn-cons" type="button">Add Row</button>
+   <% end %>
+
+
+
+
+ <% unless @vipr.status.nil?  %>
+<table  id="dtItem" class="" > 
+  <% else %>
+
+<table  id="dtItem" class="" > 
+  <% end %>
+
+  <thead>
+      <tr>
+      <th width='10%'>Dept.</th>
+      <th width='10%'>Purch.</th>
+      <th width='10%'>Product</th>
+      <th width='30%'>Description</th>
+      <th width='13%'>Price</th>
+      <th width='12%'>Qty</th>
+      <th width='20%'>Amount</th>
+      </tr>
+  </thead>
+   <tbody class='fields' id='field'>
+     <% unless @vipr.status.nil?  %>
+          <!-- Edit/View Mode -->
+          <%= f.simple_fields_for :vipr_items do |builder| %>
+            <%= render 'vipr_item', f: builder %>
+          <% end %>
+     <% else %>
+          <!-- New Mode -->
+
+         <% if params[:source]=='Non PO' || params[:source] ==''  %>
+               <!-- Edit/View Mode Non PO -->
+            
+                     <tr>
+                      <td width='10%'>
+                          <select  class="full-width" data-init-plugin="select2" placeholder = "Dept" id="cbo_dept"    
+                            <% @depts = Dept.all
+                               @depts.each do |dept| %>
+                               <option value="<%= dept.name %>"><%= dept.name %></option>
+                            <% end %>
+                            <option selected="selected"></option>
+                          </select>
+                      </td>
+                      <td>
+                        <select  class="full-width" data-init-plugin="select2" placeholder = "Purch" id="cbo_purc"    
+                            <% @cc = Costcenter.all
+                               @cc.each do |cc| %>
+                               <option value="<%= cc.name %>"><%= cc.name %></option>
+                            <% end %>
+                            <option selected="selected"></option>
+                          </select>    
+                      </td>
+                      <td>
+                        <select  class="full-width" data-init-plugin="select2" placeholder = "Prod" id="cbo_prod"    
+                            <% @product = Product.all
+                               @product.each do |product| %>
+                               <option value="<%= product.name %>"><%= product.name %></option>
+                            <% end %>
+                            <option selected="selected"></option>
+                          </select>    
+                      </td>
+                      <td>
+                         <% if  params[:doctype] == 'Item' || @vipr.doctype == 'Item'    %>
+                         <select  class="full-width" data-init-plugin="select2" placeholder = "Description" id="txt_desc"
+                            <% @expense = Expense.all
+                               @expense.each do |expense| %>
+                               <option value="<%= expense.name %>"><%= expense.name %></option>
+                               <option selected="selected"></option>
+                            <% end %>
+                         <% else %>
+                            <input id="txt_desc" class="form-control" placeholder="Description" type="text" />
+                         <% end %>
+                      </td>
+                      <td>
+                        <input  id="txt_harga" class="form-control" placeholder="Price" type="number" align="right" />
+                      </td>
+                      <td>
+                        <input id="txt_qty" class="form-control" placeholder="Qty" type="number" align="right" />
+                      </td>
+                      <td>
+                        <input id="txt_linetotal" class="form-control" placeholder="Total" type="number" align="right" />
+                      </td>
+                    </tr>
+                    <th colspan="8">
+                      <input id="txt_spec" class="form-control" placeholder="Spesification" type="text"  />
+                    </th>
+                    <tr>
+                      <td>Contents :</td>
+                  </tr>
+
+               <% else %>
+                  <!-- Edit/View Copy From PO -->
+                  <% unless @po_item.nil?  %>
+                    <% @po_item.each do |vipr_item| %>
+                       <% unless  vipr_item.nil? %>
+                       <tr>
+                          <td width='10%'>
+                              <select  class="full-width" data-init-plugin="select2" placeholder = "Dept" id="cbo_dept"
+                           
+
+                                <% @depts = Dept.all
+                                   @depts.each do |dept| %>
+                                   <option value="<%= dept.name %>"><%= dept.name %></option>
+                                <% end %>
+                                   <option selected="selected"></option>
+                              </select>
+
+                          </td>
+                          <td>
+                            <select  class="full-width" data-init-plugin="select2" placeholder = "Purch" id="cbo_purc"    
+                                <% @cc = Costcenter.all
+                                   @cc.each do |cc| %>
+                                   <option value="<%= cc.name %>"><%= cc.name %></option>
+                                   
+                                <% end %>
+                                <option selected="selected"></option>
+                              </select>    
+                          </td>
+                          <td>
+                            <select  class="full-width" data-init-plugin="select2" placeholder = "Prod" id="cbo_prod"    
+                                <% @product = Product.all
+                                   @product.each do |product| %>
+                                   <option value="<%= product.name %>"><%= product.name %></option>
+
+                                <% end %>
+                                <option selected="selected"></option>
+                              </select>    
+                          </td>
+                          <td>
+                             <% if  params[:doctype] == 'Item'    %>
+                             <select  class="full-width" data-init-plugin="select2" placeholder = "Description" id="txt_desc"
+                                <% @expense = Expense.all
+                                   @expense.each do |expense| %>
+                                   <option value="<%= expense.name %>"><%= expense.name %></option>
+                                <% end %>
+                             <% else %>
+                                <input id="txt_desc" class="form-control" placeholder="Description" type="text" />
+                             <% end %>
+                          </td>
+                        <td>
+                          <input  id="txt_harga" class="form-control" placeholder="Price" type="number" align="middle" />
+                        </td>
+                        <td>
+                          <input id="txt_qty" class="form-control" placeholder="Qty" type="number" align="right" />
+                        </td>
+                        <td>
+                          <input id="txt_linetotal" class="form-control" placeholder="Total" type="number" align="right" />
+                        </td>
+                    </tr>
+                    <th colspan="8">
+                      <input id="txt_spec" class="form-control" placeholder="Spesification" type="text"  />
+                    </th>
+                  <tr>
+                    <td>Contents :</td>
+                  </tr>
+                  <tr>
+                     
+                        <td class="v-align-middle">
+                          
+                          <input disabled id="txt_Dept" class="form-control" placeholder="Dept"  type="text"  value='<%= vipr_item.dept %>' />
+                        </td>
+                        <td class="v-align-middle">
+                          <input disabled id="txt_Purch" class="form-control" placeholder="Purchasing"   value='<%= vipr_item.costcenter %>' />
+                        </td>
+                        <td class="v-align-middle">
+                          <input disabled id="txt_Product" class="form-control" placeholder="Product"   value='<%= vipr_item.product %>' />
+                        </td>
+                         <td class="v-align-middle">
+                          <input disabled id="txt_desc" class="form-control" placeholder="Description"   value='<%= vipr_item.description %>' />
+                        </td>
+                        
+                        <td class="v-align-middle">
+                          <input disabled id="txt_price" class="form-control" placeholder="Qty" type="number" align="right" value=<%= vipr_item.price.to_i %> />
+                        </td>
+                        <td class="v-align-middle">
+                          <input disabled id="txt_quantity" class="form-control" placeholder="Qty" type="number" align="right" value=<%= vipr_item.quantity.to_i %> />
+                        </td>
+                        <td class="v-align-middle">
+                          <input disabled id="txt_amount" class="form-control" placeholder="Qty" type="number" align="right" value=<%= vipr_item.amount.to_i %> />
+                        </td>
+                      </tr>
+                      
+                        <th colspan="8">
+                          <input id="txt_spec" class="form-control" placeholder="Spesification" type="text"  value='<%= vipr_item.spesification %>' disabled />
+                        </th>
+                             
+                    
+               
+                 <% end %>
+              
+                <% end %>
+
+              <% end %>
+          <% end %>
+        
+       <% end %>
+   </tbody>
+</table>
+
+
+
+
+ 
+<br>
+
+
+
+<div class="row">
+
+
+    <!-- START LEFT BELOW SECTION -->
+    <div class="col-sm-6 d-flex flex-column">
+    
+      
+    </div>
+    <!-- END LEFT BELOW SECTION -->
+
+
+   <!-- START RIGHT BELOW SECTION -->
+    <div class="col-sm-6  d-flex flex-column">
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header clearfix">
+          
+        <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+
+
+          <% unless @vipr.status.nil?  %>
+ 
+                <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Sub Total</label>
+                  <div class="col-md-9" text-align="right">
+                    <%= f.text_field :subtotal,style: 'text-align: right', :value => number_to_currency(f.object.subtotal, unit: "", precision: 0) ,id: 'txt_subtotal', class: 'form-control' , :disabled =>true %>
+                  </div>
+                </div>
+
+
+                 <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Disc.</label>
+                  <div class="col-md-9" text-align="right">
+                    <%= f.text_field :disc ,style: 'text-align: right',id: 'txt_disc', class: 'form-control' , disabled: (true unless @vipr.status.nil?) %>
+                  </div>
+                </div>
+
+                 <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Total After Discount</label>
+                  <div class="col-md-9" text-align="right">
+                    <%= f.text_field :totbefdisc,style: 'text-align: right', :value => number_to_currency(f.object.total, unit: "", precision: 0) ,id: 'txt_total', class: 'form-control' , :disabled =>true %>
+                  </div>
+                </div>
+
+
+                 <div class="form-group row">
+                  <label for="fname" id="lblVat" class="col-md-3 control-label">VAT</label>
+                  <div class="col-md-6">
+                    <%= f.text_field :vat,style: 'text-align: right', :value => number_to_currency(f.object.vat, unit: "", precision: 0) ,:id => 'txt_Vat', class: 'form-control', :disabled =>true  %>
+                  </div>
+                   <div class="col-md-3">
+                    <%= f.check_box :is_vat, :id => 'chkVat', value:@vipr.is_vat  ,disabled: (true unless @vipr.status.nil?), :label => 'VAT ?' %>
+                  </div>
+
+
+                </div>
+
+
+                <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Grand Total</label>
+                  <div class="col-md-9">
+                    <%= f.text_field :grand_total,style: 'text-align: right', :value => number_to_currency(f.object.grand_total, unit: "", precision: 0) ,id: 'txt_grandtotal', class: 'form-control' , :disabled =>true  %>
+                  </div>
+                </div>
+
+
+                 <% if @vipr.source == 'PO'   %>
+
+
+
+                
+
+                  <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Payment Amount (%)</label>
+                  <div class="col-md-9">
+                    <%= f.text_field :dp , style: 'text-align: right',:value => number_to_currency(f.object.dp, unit: "", precision: 0), id: 'txt_dp', class: 'form-control' ,  disabled: (true unless @vipr.status.nil?)   %>
+                  </div>
+                </div>
+
+
+
+                  <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Payment Amount</label>
+                  <div class="col-md-9">
+                    <%= f.text_field :dp_amount, style: 'text-align: right',:value => number_to_currency(f.object.dp_amount, unit: "", precision: 0), id: 'txt_dpamount', class: 'form-control' , :disabled =>true  %>
+                  </div>
+                </div>
+
+                  <% end %>
+
+
+                <% else %>
+
+                 <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Sub Total</label>
+                  <div class="col-md-9" text-align="right">
+                    <%= f.text_field :subtotal,style: 'text-align: right',id: 'txt_subtotal', class: 'form-control' , :disabled =>true %>
+                  </div>
+                </div>
+
+
+                 <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Disc.</label>
+                  <div class="col-md-9" text-align="right">
+                    <%= f.text_field :disc ,style: 'text-align: right',id: 'txt_disc', class: 'form-control' , disabled: (true unless @vipr.status.nil?) %>
+                  </div>
+                </div>
+
+                 <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Total After Discount</label>
+                  <div class="col-md-9" text-align="right">
+                    <%= f.text_field :totbefdisc,style: 'text-align: right',id: 'txt_total', class: 'form-control' , :disabled =>true %>
+                  </div>
+                </div>
+
+
+                 <div class="form-group row">
+                  <label for="fname" id="lblVat" class="col-md-3 control-label">VAT</label>
+                  <div class="col-md-6">
+                    <%= f.text_field :vat ,style: 'text-align: right',:id => 'txt_Vat', class: 'form-control', :disabled =>true  %>
+                  </div>
+                   <div class="col-md-3">
+                    <%= f.check_box :is_vat, :id => 'chkVat', value:@vipr.is_vat  ,checked: (true if @vipr.vat > 0) ,disabled: (true unless @vipr.status.nil?), :label => 'VAT ?' %>
+                  </div>
+
+
+                </div>
+
+
+                <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Grand Total</label>
+                  <div class="col-md-9">
+                    <%= f.text_field :grand_total , style: 'text-align: right', id: 'txt_grandtotal', class: 'form-control' , :disabled =>true  %>
+                  </div>
+                </div>
+
+                <% if params[:source] == 'PO'   %>
+
+
+
+                  <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">PO Open Amount</label>
+                  <div class="col-md-9">
+                    <%= f.text_field :net_payment , style: 'text-align: right', id: 'txt_payment', class: 'form-control' ,  :disabled => true  %>
+                  </div>
+                </div>
+
+                
+
+                  <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Payment Amount (%)</label>
+                  <div class="col-md-9">
+                    <%= f.text_field :dp , style: 'text-align: right', id: 'txt_dp', class: 'form-control' ,  disabled: (true unless @vipr.status.nil?)   %>
+                  </div>
+                </div>
+
+
+
+                  <div class="form-group row">
+                  <label for="fname" class="col-md-3 control-label">Payment Amount</label>
+                  <div class="col-md-9">
+                    <%= f.text_field :dp_amount , style: 'text-align: right', id: 'txt_dpamount', class: 'form-control' , :disabled =>true  %>
+                  </div>
+                </div>
+
+          
+
+
+                  <% end %>
+
+
+
+              <% end %>
+
+
+
+
+
+
+         
+
+
+      
+
+        </div>
+      </div>
+    </div>
+    <!-- END BELOW RIGHT -->
+
+  </div>
+<hr>
+
+
+  <div class="actions">
+
+  <% unless @vipr.id.nil?  %> 
+    <% 
+     @viprs = Vipr.find_by_sql("SELECT * FROM viprs WHERE (approval1 ='" + current_user.email + "' or approval2 ='" + current_user.email + "' or approval3 ='" + current_user.email + "' or approval4 ='" + current_user.email + "') and id=" + @vipr.id.to_s  + " and status NOT IN ('Approved','Rejected') ")
+     
+     %>
+     
+     <% if @viprs.any?  %> 
+        <%= f.submit 'Approve' , :class => 'btn btn-primary btn-cons',name: "status", value: "Approved",data: { confirm: 'Are you sure to Approve this Payment Request ?'  } %>
+        <%= f.submit 'Reject' , :class => 'btn btn-primary btn-cons',name: "status", value: "Rejected",data: { confirm: 'Are you sure to Reject this Payment Request ?'  } %>
+   
+
+        
+     <% else %> 
+
+     <% if current_user.role == 'Admin' && @vipr.status!='Rejected'  %>
+
+        <%= f.submit 'Reject' , :class => 'btn btn-primary btn-cons',name: "status", value: "Rejected",data: { confirm: 'Are you sure to Reject this Payment Request ?'  } %>
+
+      <% end %> 
+
+
+     <% end %> 
+   
+
+     <% 
+     @viprs = Vipr.find_by_sql("SELECT * FROM viprs WHERE id=" + @vipr.id.to_s + "")
+     
+     %>
+     
+   
+       <%= link_to 'Preview', vipr , :class => 'btn btn-primary btn-cons'  %>
+
+
+
+ 
+
+ <% else %> 
+      <%= f.submit 'Submit' , :class => 'btn btn-primary btn-cons' , :onclick => 'CheckVal()'  %>
+      <%= link_to 'Back', url_for(:back)  , :class => 'btn btn-complete btn-cons' %>
+    
+ <% end %> 
+
+
+
+  </div>
+
+
+<% end %>  
+ 
+ 
+
+  
+</div>
+
+
+
+<script>
+
+
+
+
+    $(document).on("change blur", "#txt_quantity", function() {
+        var price = $('#txt_price').val();
+        var qty = $('#txt_quantity').val();
+      
+    
+     
+        var total = price * qty; // gives the value for subtract from main value
+        //var discont = main - mult;
+        $('#txt_amount').val(total);
+        $('#txt_subtotal').val(total);
+      
+        RefreshTotal(); 
+         
+
+
+    });
+
+    $(document).on("change blur", "#txt_dp", function() {
+
+       var Amount = Number($('#txt_grandtotal').val()) ;
+       var DP = Number($('#txt_dp').val()) ;
+       
+      
+
+      if ($('#vipr_source').val() == "PO")
+      {
+            var Payment = Number((DP/100)*Amount) ;
+             $('#txt_dpamount').val(Payment);
+      }
+       
+        
+     
+         
+    });
+
+
+  function  RefreshDP(val) 
+  {
+     //Validasi
+     var Amount = Number($('#txt_grandtotal').val()) ;
+     var DP = Number($('#txt_dp').val()) ;
+     
+    
+
+    if ($('#vipr_source').val() == "PO")
+    {
+          var Payment = Number((DP/100)*Amount) ;
+           $('#txt_payment').val(Payment);
+    }
+     
+    
+
+  }
+
+
+    $(document).on("change blur", "#txt_qty", function() {
+        var price = $('#txt_harga').val();
+        var qty = $('#txt_qty').val();
+      
+    
+     
+        var total = price * qty; // gives the value for subtract from main value
+        //var discont = main - mult;
+        $('#txt_linetotal').val(total);
+        
+     
+         
+    });
+
+
+  function  CheckVal(val) 
+  {
+     //Validasi
+     var Amount = Number($('#txt_subtotal').val()) ;
+     if (Amount == 0 ) 
+     {
+        alert("VIPR is Zero. You cannot create Payment Request with Zero Amount");
+        event.preventDefault();
+        
+     }
+     else
+     {
+        var PaidAmount = Number($('#txt_dpamount').val()) ;
+        if (PaidAmount == 0 ) 
+        {
+          alert("Payment is Zero . You cannot create Payment Request with Zero Payment Amount");
+          event.preventDefault();
+        
+        }
+        else
+        {
+          if ($('#vipr_source').val() == "PO")
+          {
+            PushPOToVIPR();
+          }
+        }
+     }
+    
+
+  }
+
+  function PushPOToVIPR(val)
+  {
+    
+    //if ($('#vipr_source').val() == "PO")
+    //{
+
+
+      var table = document.getElementById("dtItem");
+      for (var i = 4,row; row = table.rows[i]; i++)
+      {
+        //rows
+        for (var j = 0, col; col = row.cells[j]; j++)
+        {
+          //columns
+
+          valDesc = document.getElementById("dtItem").rows[i].cells[3].children[0].value;
+          valPrice = Number(document.getElementById("dtItem").rows[i].cells[4].children[0].value);
+          valQty = Number(document.getElementById("dtItem").rows[i].cells[5].children[0].value);
+        
+          valDept = document.getElementById("dtItem").rows[i].cells[0].children[0].value;
+          valPurch = document.getElementById("dtItem").rows[i].cells[1].children[0].value;
+          valProd = document.getElementById("dtItem").rows[i].cells[2].children[0].value;
+          valTotal = Number(document.getElementById("dtItem").rows[i].cells[6].children[0].value);
+          //valSpec = document.getElementById("dtItem").rows[i+1].cells[7].children[0].value;
+          valSpec = document.getElementById("dtItem").rows[i+1].cells[0].children[0].value;
+            
+        
+        
+        
+
+        }
+
+        
+        
+        $.ajax({
+          url : "/SetLineValueVIPR",
+          type : "get",
+          //data : 'description=' +  $('#txt_desc').val() +,'price=' +  $('#txt_harga').val(),
+          data : {description: valDesc , price: valPrice, product: valProd, purch: valPurch, total: valTotal, dept: valDept, quantity:  valQty, spesification: valSpec},
+          
+          success: function(obj) 
+          {
+             //Bersih-bersih
+            
+
+
+          }
+        })
+
+
+      }
+    //}
+    //else
+    //{
+     //  PushVIPR();
+
+    //}
+  }
+
+  function PushVIPR(val)
+  {
+    
+    
+
+      var table = document.getElementById("dtItem");
+      for (var i = 4,row; row = table.rows[i]; i++)
+      {
+        //rows
+        for (var j = 0, col; col = row.cells[j]; j++)
+        {
+          //columns
+
+          valDesc = document.getElementById("dtItem").rows[i].cells[3].children[0].value;
+          valPrice = Number(document.getElementById("dtItem").rows[i].cells[4].children[0].value);
+          valQty = Number(document.getElementById("dtItem").rows[i].cells[5].children[0].value);
+        
+          valDept = document.getElementById("dtItem").rows[i].cells[0].children[0].value;
+          valPurch = document.getElementById("dtItem").rows[i].cells[1].children[0].value;
+          valProd = document.getElementById("dtItem").rows[i].cells[2].children[0].value;
+          valTotal = Number(document.getElementById("dtItem").rows[i].cells[6].children[0].value);
+          valSpec = document.getElementById("dtItem").rows[i].cells[7].children[0].value;
+
+        
+
+        }
+
+        
+        
+        $.ajax({
+          url : "/SetLineValueVIPR",
+          type : "get",
+          //data : 'description=' +  $('#txt_desc').val() +,'price=' +  $('#txt_harga').val(),
+          data : {description: valDesc , price: valPrice, product: valProd, purch: valPurch, total: valTotal, dept: valDept, quantity:  valQty, spesification: valSpec},
+          
+          success: function(obj) 
+          {
+             //Bersih-bersih
+            
+
+
+          }
+        })
+
+
+      }
+    
+  }
+
+
+
+
+  function  ResetVal(val) 
+  {
+     
+   
+   if ($('#txt_harga').val()== "")
+   {
+      alert("Price is Missing");
+   }
+ 
+   else
+   {
+      if ($('#txt_qty').val()== "")
+      {
+        alert("quantity is Missing");
+      }
+      else
+      {
+        //document.getElementById("MyDesc").value =  $('#txt_desc').val();
+        valDesc = $('#txt_desc').val();
+        valPrice = Number($('#txt_harga').val());
+        valQty = Number($('#txt_qty').val());
+        
+        valDept = $('#cbo_dept').val();
+        valPurch = $('#cbo_purc').val();
+        valProd = $('#cbo_prod').val();
+        valTotal = Number($('#txt_linetotal').val());
+        valSpec  = $('#txt_spec').val();
+
+           //Bersih-bersih
+            $('#txt_desc').val('') ;
+            $('#txt_harga').val('') ;
+            $('#txt_qty').val('') ;
+            $('#txt_linetotal').val('') ;
+            $('#txt_spec').val('') ;
+
+
+
+
+        //Check if Not Based on PO
+        
+        if ($('#vipr_source').val() == "Non PO")
+        {
+    
+          $.ajax({
+            url : "/SetLineValueVIPR",
+            type : "get",
+            //data : 'description=' +  $('#txt_desc').val() +,'price=' +  $('#txt_harga').val(),
+            data : {description: valDesc , price: valPrice, product: valProd, purch: valPurch, total: valTotal, dept: valDept, quantity:  valQty, spesification: valSpec},
+            
+            success: function(obj) 
+            {
+               //Bersih-bersih
+              $('#txt_desc').val('') ;
+              $('#txt_harga').val('') ;
+              $('#txt_qty').val('') ;
+              $('#txt_linetotal').val('') ;
+              $('#txt_spec').val('') ;
+             
+
+            }
+           });
+        }
+       
+       
+        
+          
+  
+          var table = document.getElementById("dtItem");
+          var r = document.createElement("TR");
+          r.innerHTML = `<tr>
+              <td>
+                <input   id="txt_Dept" class="form-control" placeholder="Description" type="text" value=' ` +  valDept +    `' disabled />
+              </td>
+              <td>
+                <input  id="txt_Purch" class="form-control" placeholder="Description" type="text" value=' ` +  valPurch +    `'  disabled/>
+              </td>
+              <td>
+                <input   id="txt_Product" class="form-control" placeholder="Description" type="text" value=' ` +  valProd +    `' disabled/>
+              </td>
+              <td>
+                <input id="txt_desc" class="form-control" placeholder="Description" type="text" value=' ` +  valDesc +    `' disabled/>
+              </td>
+              <td>
+                <input id="txt_harga" class="form-control" placeholder="Price" type="number" align="right" value='` +  valPrice +    `' disabled/>
+              </td>
+              <td>
+                <input id="txt_qty" class="form-control" placeholder="Qty" type="number" align="right"  value='` +  valQty +    `' disabled />
+              </td>
+              <td>
+                <input id="txt_linetotal" class="form-control" placeholder="Total" type="number" align="right"  value='` +  valTotal +    `' disabled />
+              </td>
+              
+            </tr>
+
+            
+
+                `
+
+              table.appendChild(r);
+
+              var table = document.getElementById("dtItem");
+              var r = document.createElement("TR");
+              r.innerHTML = `
+                  
+                 <th colspan="8">
+                    <input id="txt_spec" class="form-control" placeholder="Spesification" type="text"  value='` +  valSpec +    `' disabled />
+                    </th>
+               
+              
+                </tr>
+
+                
+
+                    `
+
+              table.appendChild(r);
+
+
+
+
+
+
+      }
+      var TempTotal = 0;
+      TempTotal = $('#txt_subtotal').val();
+      $('#txt_subtotal').val( Number(TempTotal) +  Number(valTotal)) ;
+      $('#txt_total').val( Number(TempTotal) +  Number(valTotal)) ;
+      
+      
+      RefreshTotal();
+    }
+
+  };
+
+
+  
+    $(document).on('form', function(event){
+      var field = event.field;
+      var price = field.find('.txt_price');
+      var quantity = field.find('.txt_quantity');
+
+
+      $(".i_qty , .r_qty").change( function() {
+        var amt = parseFloat( RField.val() ) + parseFloat( IField.val() );
+        FField.val(Math.round(amt));
+      });
+    })
+
+
+     $(document).on("change blur", "#txt_disc", function() {
+    
+        RefreshTotal(); 
+         
+    });
+
+    function GetPONo() 
+    {
+       var PoNo = $('#cbo_pono').val() ;
+       GetPONo = PoNo ;
+    }
+
+
+    function GetExpense(expense) {
+      
+       $.getJSON({
+          url : "/getExpense",
+          type : "get",
+          data : 'costcenter=' + expense,
+          success: function(obj) 
+          {
+            
+            if (obj == 0)  //if Emplo
+            {
+              $('#cbo_product').empty();
+              $('#cbo_product').append( $('<option></option>'));
+            }
+            else
+            {
+              $('#cbo_product').empty();
+              $('#cbo_product').append( $('<option><choose></option>'));
+         
+              jQuery.each(obj,function(i) 
+                {
+                $('#cbo_product').append( $('<option value="'+ obj[i].name +'">'+obj[i].name +'</option>'));
+                }
+              );
+            }
+          }
+       });
+    };
+
+
+
+    function CopyFromPO_JS(no) {
+      //var no = $('#cbo_pono').val()  
+       $.getJSON({
+          url : "/CopyFromPO",
+          type : "get",
+          data : 'no=' + no,
+          success: function(obj) 
+          {
+            
+            
+            
+          }
+       });
+    };
+
+
+    function CallFromPO() {
+      var no = $('#cbo_pono').val() ;
+      document.location.href = "/viprs/new?no=" + no  + "&source=PO";
+
+    };
+
+
+    function getPO(supplier) {
+      
+       $.getJSON({
+          url : "/getPO",
+          type : "get",
+          data : 'supplier=' + supplier,
+          success: function(obj) 
+          {
+            
+            if (obj == 0)  //if Emplo
+            {
+              $('#cbo_pono').empty();
+              $('#cbo_pono').append( $('<option></option>'));
+            }
+            else
+            {
+              $('#cbo_pono').empty();
+              $('#cbo_pono').append( $('<option><choose></option>'));
+         
+              jQuery.each(obj,function(i) 
+                {
+                $('#cbo_pono').append( $('<option value="'+ obj[i].sapno +'">'+obj[i].sapno +'</option>'));
+                }
+              );
+            }
+          }
+       });
+    }; 
+
+
+    function RefreshVal(supplier) {
+      
+       $.ajax({
+          url : "/getsupplierinfo",
+          type : "get",
+          data : 'supplier_name=' + supplier,
+          success: function(result) 
+          {
+            var obj = JSON.parse(result.toString());
+            $('#txt_attention').val(obj.attention);
+            $('#txt_address').val(obj.address);
+          }
+       });
+    }; 
+
+
+    function RefreshTotal() 
+    {
+      var subtotal,disc,vat,befdi,total = 0 ;
+      subtotal = $('#txt_subtotal').val() ;
+      disc = $('#txt_disc').val() ;
+      befdi = Number(subtotal) + Number(disc) ;
+      var $Check  = $('#chkVat').is(':checked');
+      if( $Check)
+      {
+        //VAT
+          if ($('#cbo_supplier').val() == '20062-10 VAYATOUR ,PT')
+          {
+            $('#txt_Vat').val(befdi*0.01); 
+            vat =  $('#txt_Vat').val();
+          }
+          else
+          {
+        //VAT
+          $('#txt_Vat').val(befdi*0.1); 
+          vat =  $('#txt_Vat').val();
+        }
+      }
+      else 
+      {
+        //Non VAT
+          $('#txt_Vat').val(0);
+          vat = 0;
+      }    
+
+      
+      $('#txt_disc').val(disc);
+      //$('#txt_Vat').val(vat);
+      $('#txt_Vat').val(vat);
+      
+      $('#txt_subtotal').val(subtotal);
+      $('#txt_total').val(befdi);
+      total = Number(befdi) + Number(vat) ;
+      $('#txt_grandtotal').val(total); 
+     
+         
+    }; 
+
+
+    
+
+    $('#chkVat').on('click' , function()
+    {
+      var $Check  = $('#chkVat').is(':checked');
+      var subtotal = $('#txt_subtotal').val()
+      var disc = $('#txt_disc').val()
+      
+      if( $Check)
+      {
+        //VAT
+          //var subtotal = $('#txt_subtotal').val()
+          //$('#txt_Vat').val(subtotal*0.1); 
+          RefreshTotal();
+      }
+      else 
+      {
+        //Non VAT
+          $('#txt_Vat').val(0);
+          RefreshTotal();
+      }    
+             
+      //$('#txt_Vat').html(text);
+    });
+
+        
+ function getGroup(group) {
+       requester = $('#vipr_req_email').val()
+       trans = $('#source').val()
+       if (trans =='PO' || trans =='Non PO')
+       {
+           trans = 'PRPAY';
+       }
+       else
+       {
+        trans = 'SETT';
+
+       }
+
+       $.getJSON({
+          //url : "/getGroup?group=" + group + "&requester=" + requester + "",
+	 url : "/getGroup?group=" + group + "&requester=" + requester + "&trans=" + trans,
+
+          
+          type : "get",
+          //data : 'group:' + group,
+          //data : 'requester:' + requester,
+          success: function(result) 
+          {
+
+
+            $('#Approval1').val(result.apv1);
+            $('#Approval2').val(result.apv2);
+            $('#Approval3').val(result.apv3);
+            $('#Approval4').val(result.apv4);
+            
+            
+          }
+       });
+    }; 
+
+
+   </script>    
+
+
+
+

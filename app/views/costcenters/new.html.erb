@@ -1,0 +1,11 @@
+
+<% content_for(:html_title) { 'Cost Center - New' } %>
+<div class="card card-default">
+
+	<%= render 'form', costcenter: @costcenter %>
+
+	<br>
+	<%= link_to 'Back', costcenters_path, :class => 'btn btn-complete btn-cons' %>
+
+</div>
+<br>

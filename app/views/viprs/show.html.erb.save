@@ -1,0 +1,375 @@
+
+
+
+<% content_for(:html_title) { 'Payment Request - View : No. ' + @vipr.id.to_s + ' | Status : ' + @vipr.status } %>
+
+<div class=" container    container-fixed-lg">
+  <div class="card card-default m-t-20">
+    <div class="card-body">
+     <div class="invoice padding-50 sm-padding-10">
+      <!-- HEADER SECTION START -->  
+        <div>
+          <div class="pull-left">
+             <%= image_tag 'logo.png', alt: '', style: 'height:20%;width:20%;' %>
+            <address class="m-t-10">
+              <b>PT. Astellas Pharma Indonesia</b><br>
+              Plaza Oleos , 5th Floor Jl. TB Simatupang No. 53A, <br>
+              Jakarta Selatan 12520 Jakarta - Indonesia<br>
+              <i class="fa fa-phone"></i> Tel: +621-227-80171 , Fax: +621-227-80180
+              <br>
+            </address>
+            <hr>
+          </div>
+
+          <div class="sm-m-t-20">
+
+            <h2 class="bold hint-text"><center>Payment Request</center></h2>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
+        <br>
+        <div class="col-12">
+          <div class="row">  
+            <div class="col-lg-9 col-sm-height sm-no-padding  d-flex  ">
+              
+
+              <div>
+                <div class="bold">Payment Req. No</div>
+                <div class="bold">Supplier</div>
+                <div class="bold">Vend. Invoice No</div>
+                <div class="bold">Project Code</div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="text-left">
+                <div class="">: <%= @vipr.id %></div>
+                <div class="">: <%= @vipr.supplier %></div>
+                <div class="">: <%= @vipr.invoice_no %></div>
+                <div class="">: </div>
+                
+               
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+
+        <div class="col-lg-3 sm-no-padding sm-p-b-20 d-flex  justify-content-between">
+
+
+
+
+        <div>
+                <div class="bold">Posting Date</div>
+                <div class="bold">Due Date</div>
+             
+                <div class="bold">Currency</div>
+                <div class="bold">Status</div>
+              
+
+               <div class="clearfix"></div>
+        </div>
+        <div class="text-left">
+            <% unless @vipr.invoice_date.nil? %>
+                  <div class="">: <%= @vipr.invoice_date.try(:strftime,'%d/%m/%Y') %></div>
+                <% end %>
+                <% unless @vipr.due_date.nil? %>
+                  <div class="">: <%= @vipr.due_date.try(:strftime,'%d/%m/%Y') %></div>
+                <% end %>
+              
+                <div class="">: <%= @vipr.currency %></div>
+                <div class="">: <%= @vipr.status %></div>
+                <div class="clearfix"></div>
+            </div>
+            </div>
+          </div>
+      </div>
+      <!-- HEADER SECTION END-->  
+
+      <hr>
+      Remarks : @vipr.remarks
+
+
+      <!-- APPROVAL SECTION -->
+      
+      <div class="table-responsive table-invoice">
+        <table class="table m-t-50">
+         <thead>
+            <tr>
+              <th class="">Name</th>
+              <th class="">Status</th>
+              <th class="">Date</th>
+            </tr>
+         </thead>
+         <tbody>
+          <tr>
+            <td class=""><b>Approval Status :</b></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <% unless (@vipr.approval1.nil? || @vipr.approval1 == '')   %>
+          
+          <tr>
+            <td class=""><p class="text-black">Reviewed By :
+              <%= unless @vipr.approval1.nil? || @vipr.approval1 == '' then
+                User.find_by(email: @vipr.approval1).name end %></p>
+            </td>
+            
+
+            <td class="">
+            <p class="text-black">
+               <% if (@vipr.apv_date1.nil? || @vipr.apv_date1 == '')  %>
+                  <% if @vipr.approval1.nil? || @vipr.approval1 == '' %>
+                   <% else %>
+                      Not Approved
+                   <% end %>  
+               <% else %>
+                  Approved
+               <% end %>
+            </p>
+            </td>
+            
+            <td class="">
+              <p class="text-black"><%= unless @vipr.apv_date1.nil? || @vipr.approval1 == '' then @vipr.apv_date1.try(:strftime,'%d/%m/%Y - %T') end %> </p>
+            </td>
+          </tr>
+          <% end %>
+          
+         
+
+          <% unless (@vipr.approval2.nil? || @vipr.approval2 == '')   %>
+          <tr>
+            <td class=""><p class="text-black">Approval : <%= unless @vipr.approval2.nil? || @vipr.approval2 == '' then User.find_by(email: @vipr.approval2).name end %></p>
+            </td>
+           
+
+            <td class="">
+              <p class="text-black">
+                 <% if (@vipr.apv_date2.nil? || @vipr.apv_date2 == '')  %>
+                    <% if @vipr.approval2.nil? || @vipr.approval2 == '' %>
+                    
+                     <% else %>
+                        Not Approved
+                     <% end %>  
+                 <% else %>
+                    Approved
+                 <% end %>
+
+              </p>
+            </td>
+
+            
+            <td class="">
+              <p class="text-black"><%= unless @vipr.apv_date2.nil? || @vipr.approval2 == '' then @vipr.apv_date2.try(:strftime,'%d/%m/%Y - %T') end %> </p>
+            </td>
+          </tr>
+          <% end %>
+
+          <% unless (@vipr.approval3.nil? || @vipr.approval3 == '')   %>
+            <tr>
+              <td class=""><p class="text-black">Approval : <%= unless @vipr.approval3.nil? || @vipr.approval3 == '' then User.find_by(email: @vipr.approval3).name end %> </p>
+              </td>
+             
+
+              <td class="">
+                <p class="text-black">
+                   <% if (@vipr.apv_date3.nil? || @vipr.apv_date3 == '')  %>
+                      <% if @vipr.approval3.nil? || @vipr.approval3 == '' %>
+                      
+                       <% else %>
+                          Not Approved
+                       <% end %>  
+                   <% else %>
+                      Approved
+                   <% end %>
+
+                </p>
+              </td>
+              <td class="">
+                <p class="text-black"><%= unless @vipr.approval3.nil? || @vipr.approval3 == ''  then @vipr.apv_date3.try(:strftime,'%d/%m/%Y - %T') end %>  </p>
+              </td>
+            </tr>
+          <% end %>
+          
+          <% unless (@vipr.approval4.nil? || @vipr.approval4 == '')   %>
+          <tr>
+            <td class=""><p class="text-black">Final Approval : <%= unless @vipr.approval4.nil? || @vipr.approval4 == ''  then User.find_by(email: @vipr.approval4).name end %></p>
+            </td>
+           
+
+            <td class="">
+              <p class="text-black">
+
+                  <% if (@vipr.apv_date4.nil? || @vipr.apv_date4 == '')  %>
+                    <% if @vipr.approval4.nil? || @vipr.approval4 == '' %>
+                    
+                     <% else %>
+                        Not Approved
+                     <% end %>  
+                 <% else %>
+                    Approved
+                 <% end %>
+
+              </p>
+            </td>
+            
+
+            <td class="">
+              <p class="text-black"><%= unless @vipr.apv_date4.nil?  then @vipr.apv_date4.try(:strftime,'%d/%m/%Y - %T') end %> </p>
+            </td>
+          </tr>
+          <% end %>
+          <tr>
+            <td class=""><b>Reviewed by Finance :</b></td>
+            <td></td>
+            <td></td>
+        
+            
+          </tr>
+
+          <tr>
+            <td class="">Verified by : Nova/Afaa/Muthia</td>
+            <td class=""></td>
+            <td class=""></td>
+           
+            
+          </tr>
+
+          <tr>
+            <td class="">Verified by : Amas</td>
+            <td class=""></td>
+            <td class=""></td>
+        
+          </tr>
+
+          <tr>
+            <td class="">Verified by : Rachmat Hidayat</td>
+            <td class=""></td>
+            <td class=""></td>
+        
+          </tr>
+
+
+
+          </tbody>
+          </table>
+      </div>
+      <!-- APPROVAL SECTION END -->
+
+
+      <br>
+      <div class="table-responsive table-invoice">
+       <div></div>
+        <table class="table m-t-50">
+          <thead>
+            <tr>
+              <th class="">Description</th>
+              <th class="">Spesification</th>
+              <th class="">Price</th>
+              <th class="">Qty</th>
+              <th class="">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <% @vipr_item.each do |vipr_item| %>
+            <tr>
+                <td class="v-align-middle semi-bold"><%= vipr_item.description %></td>
+                <td class="v-align-middle"><%= vipr_item.spesification %></td>
+                <td class="v-align-middle"><%= number_to_currency(vipr_item.price , unit: "",precision: 0 ) %></td>
+                <td class="v-align-middle"><%= number_to_currency(vipr_item.quantity, unit: "",precision: 0 ) %></td>
+                <td class="v-align-middle"><%= number_to_currency(vipr_item.amount, unit: "",precision: 0 ) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+          <div class="col-lg-10 sm-no-padding sm-p-b-20 d-flex align-items-end justify-content-between">
+        <div>
+          <br>
+        <div class="bold">Sub Total</div>
+        <div class="bold">VAT</div>
+        <div class="bold">Total</div>
+        <div class="bold">WHT</div>
+        <div class="bold">Net Payment</div>
+
+
+        
+        <div class="clearfix"></div>
+        </div>
+        <div class="text-left">
+        <div class="">: <%= number_to_currency(@vipr.subtotal , unit: "",precision: 0 ) %> </div>
+        <div class="">: <%= number_to_currency(@vipr.vat , unit: "",precision: 0 ) %></div>
+        <div class="">: <%= number_to_currency(@vipr.grand_total , unit: "",precision: 0 ) %></div>
+        <div class="">: </div>
+        <div class="">: </div>
+        
+        
+       
+        
+        <div class="clearfix"></div>
+        </div>
+        </div>
+
+
+    <table class="table m-t-50">
+          <thead>
+            <tr>
+              <th class="">GL Account</th>
+              <th class="">Quantity</th>
+              <th class="">Job Order</th>
+              <th class="">Amount</th>
+              <th class="">Description </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <% @vipr_item.each do |vipr_item| %>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <br>
+      <hr>
+
+      <!-- FOOTER SECTION -->
+      <p class="small hint-text"><center>THIS IS AN ELECTRONIC GENERATED DOCUMENT, NO SIGNATURE IS REQUIRED</center></p>
+
+      <br>
+
+      </div>
+     </div>
+   </div>
+     <%= link_to 'Edit', edit_vipr_path(@vipr), :class => 'btn btn-complete btn-cons' %> 
+     <%= link_to 'Back', url_for(:back)  , :class => 'btn btn-complete btn-cons' %>
+    
+
+     <%= link_to "PRINT", '#', onclick: "printpage()", :class => 'btn btn-complete btn-cons'  %>
+</div>
+</div>
+
+
+    
+     
+
+
+
+
+
+

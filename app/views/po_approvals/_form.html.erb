@@ -1,0 +1,131 @@
+
+
+
+
+<div class="card-body">
+
+ <% if po_approval.errors.any? %>
+        <% po_approval.errors.full_messages.each do |message| %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="close" data-dismiss="alert"></button>
+                <strong>Error: </strong><%=  message %>
+              </div>
+        <% end %>
+  <% end %>
+
+  <%= simple_form_for @po_approval,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+ 
+
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Requester</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "Requester" name="po_approval[requester]" id="po_approval_requester">
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless po_approval.requester.nil? %>
+
+              <option selected="selected"><%=  po_approval.requester %></option>
+         
+             <% end %>                      
+
+   
+        </select>
+      </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Approval 1 -  Name</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "approval1" name="po_approval[apv1]" id="po_approval_apv1">
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless po_approval.apv1.nil? %>
+
+              <option selected="selected"><%=  po_approval.apv1 %></option>
+         
+             <% end %>                      
+
+   
+        </select>
+      </div>
+  </div>
+
+
+   <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Approval 1 - Treshold</label>
+    <div class="col-md-9">
+      <%= f.text_field :apv1_amount , class: 'form-control', placeholder: 'Approval 1 - Treshold' %>
+    </div>
+  </div>
+
+
+
+ <div class="form-group row">
+    <label class="col-md-3 control-label">Approval 2 - Name</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "approval1" name="po_approval[apv2]" id="po_approval_apv2">
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless po_approval.apv2.nil? %>
+
+              <option selected="selected"><%=  po_approval.apv2 %></option>
+         
+             <% end %>                      
+
+   
+        </select>
+      </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Approval 2 - Treshold</label>
+    <div class="col-md-9">
+      <%= f.text_field :apv2_amount , class: 'form-control', placeholder: 'Approval 2 - Treshold' %>
+    </div>
+  </div>
+
+ 
+
+   <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">is Active</label>
+    <div class="col-md-9">
+      <%= f.check_box :is_active, value:@@po_approval.is_active , :id =>'checkbox1' %>
+    </div>
+  </div>
+
+ 
+
+
+  
+  <br>
+  <div class="actions">
+       <%= f.submit 'Save' , :class => 'btn btn-primary btn-cons'  %>
+        <%= link_to 'View', @po_approval, :class => 'btn btn-complete btn-cons' %> 
+       <%= link_to 'Back', po_approvals_path, :class => 'btn btn-complete btn-cons' %>
+
+     </div>
+  
+  <br>
+
+  </form>
+ 
+
+ <% end %>  
+
+
+
+</div>

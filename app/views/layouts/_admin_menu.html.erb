@@ -1,0 +1,82 @@
+<li>
+  <a href="javascript:;"><span class="title">Administration</span>
+    <span class=" arrow"></span></a>
+    <ul class="">
+      <li class="">
+         <%= link_to "User Administration", users_path, class:"dropdown-item" %> 
+      </li>
+      <li class="">
+        <%= link_to "Invite New User", new_user_invitation_path, method: :get, class:"dropdown-item" %>
+      </li>
+      <li class="">
+         <%= link_to "Authorization", authorizations_path, class:"dropdown-item" %> 
+      </li>
+
+      <li class="">
+         <%= link_to "PR Approval Rule", pr_approvals_path, class:"dropdown-item" %> 
+      </li>
+
+       <li class="">
+         <%= link_to "PO Approval Rule", po_approvals_path, class:"dropdown-item" %> 
+      </li>
+
+   <li class="">
+         <%= link_to "Notification", notifications_path, class:"dropdown-item" %> 
+      </li>
+
+  </ul>
+</li>
+<li>
+  <a href="javascript:;"><span class="title">Master Data</span>
+    <span class=" arrow"></span></a>
+    <ul class="">
+      <li class="">
+        <%= link_to "Currency", currencies_path  %>
+      </li>
+      <li class="">
+        <%= link_to "Cost Center", costcenters_path  %>
+      </li>
+      <li class="">
+        <%= link_to "Expense", expenses_path %>
+      </li>
+      <li class="">
+        <%= link_to "Department", departments_path %>
+      </li>
+      <li class="">
+        <%= link_to "Supplier", suppliers_path %>
+      </li>
+     
+  </ul>
+</li>
+<li>
+  <a href="javascript:;"><span class="title">Transactions</span>
+  <span class=" arrow"></span></a>
+  <ul class="">
+    <li class="">
+      <%= link_to "Purchase Request", purchase_requests_path  %>
+    </li>
+    <li class="">
+       <%= link_to "Purchase Order", purchase_orders_path  %>
+    </li>
+    <li class="">
+      <%= link_to "Payment Request", viprs_path  %>
+    </li>
+    
+  </ul>
+</li>
+<li>
+   <a href="javascript:;"><span class="title">Reports</span>
+  <span class=" arrow"></span></a>
+  <ul class="">
+    <li class="">
+      <%= link_to "Purchase Request Report", pr_reports_path  %>
+    </li>
+    <li class="">
+      <%= link_to "Purchase Order Report", po_reports_path  %>
+    </li>
+     <li class="">
+      <%= link_to "Payment Request Report", vipr_reports_path  %>
+    </li>
+    
+  </ul>
+</li> 

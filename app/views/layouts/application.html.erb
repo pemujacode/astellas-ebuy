@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>Astellas E Buy <% if Rails.env.test? %>  'Testing Mode' <%  end  %>  : <%= content_for?(:html_title) ? yield(:html_title) : "Dashboard" %> </title>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    
+
+
+    <link href="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" />
+    <link href="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/switchery/css/switchery.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="https://pages.revox.io/dashboard/latest/html/casual/assets/plugins/jquery-datatable/media/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://pages.revox.io/dashboard/latest/html/casual/assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://pages.revox.io/dashboard/latest/html/casual/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/pages/css/pages-icons.css" rel="stylesheet" type="text/css">
+    <link class="main-stylesheet" href="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/pages/css/themes/modern.css" rel="stylesheet" type="text/css" />
+
+        <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+
+
+  
+
+
+  </head>
+  <body class="fixed-header horizontal-menu horizontal-app-menu dashboard">
+ 
+    <!-- START PAGE-CONTAINER -->
+    <div class="header p-r-0 bg-primary">
+      <div class="header-inner header-md-height" style="background-color:#D91E49">
+        <a href="#" class="btn-link toggle-sidebar d-lg-none pg pg-menu text-white" data-toggle="horizontal-menu"></a>
+        <div class="">    
+          <font color="white"><strong>ASTELLAS E-BUY<span class="bold"> SYSTEM : <%= content_for (:html_title) %></span></strong></font>
+        </div>
+        <div class="d-flex align-items-center">
+          <!-- START USER INFO-->
+          <div class="pull-left p-r-10 fs-14 font-heading d-lg-inline-block d-none text-white">
+            <span class="semi-bold">Welcome, 
+              <% if user_signed_in? %>
+                 <b><%= current_user.email %></b> (<%= current_user.role %>) | <%= link_to "Log Out", destroy_user_session_path, method: :get %>
+              <% end %>
+            </span>
+          </div>
+          <div class="dropdown pull-right">
+            <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="thumbnail-wrapper d32 circular inline sm-m-r-5">
+              <%= image_tag 'profiles/user.png', alt: '', style: 'height:32;width:32;' %>
+
+                </span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right profile-dropdown" role="menu">
+              <%= link_to "User Profiles", current_user, class:"dropdown-item" %> 
+              <%= link_to "Log Out", destroy_user_session_path, method: :get, class:"dropdown-item" %>
+
+            </div>
+          </div>
+          <!-- END USER INFO-->
+      
+        </div>
+      </div>
+      <div class="bg-white">
+        <div class="container">
+          <div class="menu-bar header-sm-height" data-pages-init='horizontal-menu'>
+            <a href="#" class="btn-link toggle-sidebar d-lg-none pg pg-close" data-toggle="horizontal-menu">
+            </a>
+            <!-- START MENU-->
+            <ul>
+              <li class=" active">
+                <%= link_to "Dashboard", root_path %>
+              </li>
+<% unless current_user.nil? %>
+              <% if current_user.role == 'Admin' %>
+                 <%= render 'layouts/admin_menu' %>
+              <% else %>
+                <%= render 'layouts/user_menu' %>
+              <% end %>
+<% end %>
+
+
+        
+            </ul>
+            <!-- END MENU -->
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- START MAIN CONTENT-->
+    <div class="page-container ">
+      <!-- START PAGE CONTENT WRAPPER -->
+      <div class="page-content-wrapper ">
+        <nav class="navbar navbar-default bg-master-lighter sm-padding-10 full-width p-t-0 p-b-0" role="navigation">
+          <div class="container-fluid full-width">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-4">
+                 <strong><%= content_for?(:html_title) ? yield(:html_title) : "Default" %></strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>  
+        <!-- START PAGE CONTENT -->
+        <div class="content sm-gutter">
+           <!-- START CONTAINER FLUID -->
+          <div class="container sm-padding-10 p-t-20 p-l-0 p-r-0">  
+            <div class="card card-transparent">
+              <% if flash[:notice] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <button class="close" data-dismiss="alert" aria-label="Close"></button>
+                  <strong>Success: </strong><%= notice %>
+                </div>
+              <% end %>
+              
+              <% if flash[:alert] %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <button class="close" data-dismiss="alert"></button>
+                  <strong>Error: </strong><%= alert %>
+                </div>
+              <% end %>
+              
+              <!-- START ROW -->
+              <div class="row">
+                <%= yield %>
+              </div>
+              <!-- END ROW -->
+              
+              
+              <div class="clearfix"></div>
+            </div>
+                  
+          </div>
+        </div>
+
+
+      </div>
+      <!-- END ROW -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+  </div>
+  <!-- END PAGE CONTENT -->
+ 
+        <!-- START FOOTER -->
+        <div class=" container   container-fixed-lg footer">
+          <div class="copyright sm-text-center">
+            <p class="small no-margin pull-left sm-pull-reset">
+              <span class="hint-text">Copyright &copy; 2020 </span>
+              <span class="font-montserrat">PT. Astellas Pharma Indonesia</span>.
+              <span class="hint-text">All rights reserved. </span>
+              <span class="sm-block"><a href="#" class="m-l-10 m-r-10">Terms of use</a> <span class="muted">|</span> <a href="#" class="m-l-10">Privacy Policy</a></span>
+            </p>
+            <p class="small no-margin pull-right sm-pull-reset">
+              Astellas <span class="hint-text">E-Buy System</span>
+            </p>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <!-- END FOOTER -->
+      </div>
+      <!-- END PAGE CONTENT WRAPPER -->
+    </div>
+    <!-- END MAIN CONTENT -->
+
+
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/pace/pace.min.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/modernizr.custom.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/popper/umd/popper.min.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/jquery/jquery-easy.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/jquery-unveil/jquery.unveil.min.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/jquery-ios-list/jquery.ioslist.min.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/jquery-actual/jquery.actual.min.js"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+<script type="text/javascript" src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/select2/js/select2.full.min.js"></script>
+<script type="text/javascript" src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/classie/classie.js"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/switchery/js/switchery.min.js" type="text/javascript"></script>
+<script src="https://pages.revox.io/dashboard/latest/html/casual/assets/plugins/jquery-datatable/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://pages.revox.io/dashboard/latest/html/casual/assets/plugins/jquery-datatable/extensions/TableTools/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+<script src="https://pages.revox.io/dashboard/latest/html/casual/assets/plugins/jquery-datatable/media/js/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="https://pages.revox.io/dashboard/latest/html/casual/assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js" type="text/javascript"></script>
+<script type="text/javascript" src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
+<script type="text/javascript" src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
+
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/summernote/js/summernote.min.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/moment/moment.min.js"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/plugins/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/pages/js/pages.min.js"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/js/datatables.js" type="text/javascript"></script>
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/js/scripts.js" type="text/javascript"></script>
+
+<script src="https://idscdn.s3-ap-southeast-1.amazonaws.com/pages/html/casual/assets/js/form_elements.js" type="text/javascript"></script>
+
+
+ 
+   
+  </body>
+</html>
+

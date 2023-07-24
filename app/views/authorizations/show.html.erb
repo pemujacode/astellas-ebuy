@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @authorization.user_id %>
+</p>
+
+<p>
+  <strong>Costcenter:</strong>
+  <%= @authorization.costcenter %>
+</p>
+
+<p>
+  <strong>Currency:</strong>
+  <%= @authorization.currency %>
+</p>
+
+<p>
+  <strong>Department:</strong>
+  <%= @authorization.department %>
+</p>
+
+<p>
+  <strong>Expense:</strong>
+  <%= @authorization.expense %>
+</p>
+
+<p>
+  <strong>Supplier:</strong>
+  <%= @authorization.supplier %>
+</p>
+
+<p>
+  <strong>P request:</strong>
+  <%= @authorization.p_request %>
+</p>
+
+<p>
+  <strong>P order:</strong>
+  <%= @authorization.p_order %>
+</p>
+
+<p>
+  <strong>P grn:</strong>
+  <%= @authorization.p_grn %>
+</p>
+
+<%= link_to 'Edit', edit_authorization_path(@authorization) %> |
+<%= link_to 'Back', authorizations_path %>

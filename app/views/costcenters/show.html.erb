@@ -1,0 +1,33 @@
+
+<% content_for(:html_title) { 'Cost Center - View : ' + @costcenter.code } %>
+
+
+<div class="card card-default">
+	<div class="card-body">
+	 <%= simple_form_for @costcenter,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+	 
+	  <div class="form-group row">
+	    <label for="fname" class="col-md-3 control-label">Cost Center Code</label>
+	    <div class="col-md-9">
+	      <%= f.text_field :name, value:@costcenter.code , class: 'form-control' , :disabled =>true %>
+	    </div>
+	  </div>
+
+
+	  <div class="form-group row">
+	    <label for="fname" class="col-md-3 control-label">Cost Center Name</label>
+	    <div class="col-md-9">
+	      <%= f.text_field :name, value:@costcenter.name , class: 'form-control' , :disabled =>true %>
+	    </div>
+	  </div>
+
+ 
+
+	  <br>
+	 <% end %>  
+
+	<%= link_to 'Edit', edit_costcenter_path(@costcenter), :class => 'btn btn-complete btn-cons' %> 
+	<%= link_to 'Back', costcenters_path , :class => 'btn btn-complete btn-cons' %>
+
+	</div>
+</div>

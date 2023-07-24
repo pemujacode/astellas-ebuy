@@ -1,0 +1,29 @@
+
+<% content_for(:html_title) { 'Purchase Order - Report' } %>
+
+
+<!-- START card -->
+<div class="card card-transparent">
+    <div class="card-header">
+     <div class="pull-left">
+       <%= datagrid_form_for @grid, :method => :get, :url => po_reports_path %>
+   
+     </div>
+     <div class="pull-right">
+
+     </div>
+     <div class="clearfix"></div>
+   </div>
+   <div class="card-body">
+     
+     <table class="table table-hover demo-table-search table-responsive-block">
+       
+          <%= datagrid_table @grid %>
+      
+     </table>
+      <%= paginate(@grid.assets) %>
+      <br>
+       <div class='total'><strong>Total Record:</strong> <%= @grid.assets.total_count %></div>   
+   </div>
+  
+</div>

@@ -1,0 +1,41 @@
+
+<% content_for(:html_title) { 'Expense - View : ' + @expense.code } %>
+
+
+<div class="card card-default">
+  <div class="card-body">
+   <%= simple_form_for @expense,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+   
+    <div class="form-group row">
+      <label for="fname" class="col-md-3 control-label">Expense Code</label>
+      <div class="col-md-9">
+        <%= f.text_field :name, value:@expense.code , class: 'form-control' , :disabled =>true %>
+      </div>
+    </div>
+
+
+    <div class="form-group row">
+      <label for="fname" class="col-md-3 control-label">Expense Name</label>
+      <div class="col-md-9">
+        <%= f.text_field :name, value:@expense.name , class: 'form-control' , :disabled =>true %>
+      </div>
+    </div>
+
+      <div class="form-group row">
+      <label for="fname" class="col-md-3 control-label">GL Account</label>
+      <div class="col-md-9">
+        <%= f.text_field :name, value:@expense.gl_account , class: 'form-control' , :disabled =>true %>
+      </div>
+    </div>
+
+
+ 
+
+    <br>
+   <% end %>  
+
+  <%= link_to 'Edit', edit_expense_path(@expense), :class => 'btn btn-complete btn-cons' %> 
+  <%= link_to 'Back', expenses_path , :class => 'btn btn-complete btn-cons' %>
+
+  </div>
+</div>

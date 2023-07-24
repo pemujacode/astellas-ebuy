@@ -1,0 +1,213 @@
+
+
+
+<div class="card-body">
+
+ <% if pr_approval.errors.any? %>
+        <% pr_approval.errors.full_messages.each do |message| %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="close" data-dismiss="alert"></button>
+                <strong>Error: </strong><%=  message %>
+              </div>
+        <% end %>
+  <% end %>
+
+  <%= simple_form_for @pr_approval,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+ 
+
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Requester</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "Requester" name="pr_approval[requester]" id="pr_approval_requester">
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless pr_approval.requester.nil? %>
+
+              <option selected="selected"><%=  pr_approval.requester %></option>
+         
+             <% end %>                      
+
+   
+        </select>
+      </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Approval 1 - Name</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "approval1" name="pr_approval[apv1]" id="pr_approval_apv1">
+          <option value=""></option>
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless pr_approval.apv1.nil? %>
+
+              <option selected="selected"><%=  pr_approval.apv1 %></option>
+         
+             <% end %>                      
+
+   
+        </select>
+      </div>
+  </div>
+
+
+   <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Approval 1 - Treshold</label>
+    <div class="col-md-9">
+      <%= f.text_field :apv1_amount , class: 'form-control', placeholder: 'Approval 1 - Treshold' %>
+    </div>
+  </div>
+
+
+
+ <div class="form-group row">
+    <label class="col-md-3 control-label">Approval 2 - Name</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "approval1" name="pr_approval[apv2]" id="pr_approval_apv2">
+           <option value=""></option>
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless pr_approval.apv2.nil? %>
+
+              <option selected="selected"><%=  pr_approval.apv2 %></option>
+         
+             <% end %>                      
+
+   
+        </select>
+      </div>
+  </div>
+
+
+   <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Approval 2 - Treshold</label>
+    <div class="col-md-9">
+      <%= f.text_field :apv2_amount , class: 'form-control', placeholder: 'Approval 2 - Treshold' %>
+    </div>
+  </div>
+
+
+
+
+<div class="form-group row">
+    <label class="col-md-3 control-label">Approval 3 - Name</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "approval1" name="pr_approval[apv3]" id="pr_approval_apv3">
+           <option value=""></option>
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless pr_approval.apv3.nil? %>
+
+              <option selected="selected"><%=  pr_approval.apv3 %></option>
+         
+             <% end %>                      
+
+   
+        </select>
+      </div>
+  </div>
+
+
+   <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Approval 3 - Treshold</label>
+    <div class="col-md-9">
+      <%= f.text_field :apv3_amount , class: 'form-control', placeholder: 'Approval 3 - Treshold' %>
+    </div>
+  </div>
+
+
+
+<div class="form-group row">
+    <label class="col-md-3 control-label">Approval 4 - Name</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "approval1" name="pr_approval[apv4]" id="pr_approval_apv4">
+           <option value=""></option>
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless pr_approval.apv4.nil? %>
+
+              <option selected="selected"><%=  pr_approval.apv4 %></option>
+         
+             <% end %>                      
+
+   
+        </select>
+      </div>
+  </div>
+
+
+   <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Approval 4 - Treshold</label>
+    <div class="col-md-9">
+      <%= f.text_field :apv4_amount , class: 'form-control', placeholder: 'Approval 4 - Treshold' %>
+    </div>
+  </div>
+
+
+   <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">is Active</label>
+    <div class="col-md-9">
+      <%= f.check_box :is_active, value:@pr_approval.is_active , :id =>'checkbox1' %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Procurement PIC</label>
+      <div class="col-md-9">
+        <select class="full-width" data-init-plugin="select2" placeholder = "pic" name="pr_approval[pic]" id="pr_approval_pic">
+        <option value=""></option>
+
+        
+          <% @requesters = User.all
+            @requesters.each do |user| %>
+            <option value="<%= user.email %> "><%= user.email %> </option>
+            <% end %>
+
+             <% unless pr_approval.pic.nil? %>
+                <option selected="selected"><%=  pr_approval.pic %></option>
+             <% end %>                      
+        </select>
+      </div>
+  </div>
+
+
+
+  <br>
+  <div class="actions">
+       <%= f.submit 'Save' , :class => 'btn btn-primary btn-cons'  %>
+       <%= link_to 'View', @pr_approval, :class => 'btn btn-complete btn-cons' %> 
+       <%= link_to 'Back', pr_approvals_path, :class => 'btn btn-complete btn-cons' %>
+  </div>
+  
+  <br>
+
+  </form>
+ 
+
+ <% end %>  
+
+
+
+</div>
+

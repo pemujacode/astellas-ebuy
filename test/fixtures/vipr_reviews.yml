@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  title: MyString
+  email: MyString
+  plafond: 9.99
+  order: 1
+
+two:
+  name: MyString
+  title: MyString
+  email: MyString
+  plafond: 9.99
+  order: 1

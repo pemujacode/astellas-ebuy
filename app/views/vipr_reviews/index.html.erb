@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Vipr Reviews</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Title</th>
+      <th>Email</th>
+      <th>Plafond</th>
+      <th>Order</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vipr_reviews.each do |vipr_review| %>
+      <tr>
+        <td><%= vipr_review.name %></td>
+        <td><%= vipr_review.title %></td>
+        <td><%= vipr_review.email %></td>
+        <td><%= vipr_review.plafond %></td>
+        <td><%= vipr_review.order %></td>
+        <td><%= link_to 'Show', vipr_review %></td>
+        <td><%= link_to 'Edit', edit_vipr_review_path(vipr_review) %></td>
+        <td><%= link_to 'Destroy', vipr_review, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vipr Review', new_vipr_review_path %>

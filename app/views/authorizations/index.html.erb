@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Authorizations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Costcenter</th>
+      <th>Currency</th>
+      <th>Department</th>
+      <th>Expense</th>
+      <th>Supplier</th>
+      <th>P request</th>
+      <th>P order</th>
+      <th>P grn</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @authorizations.each do |authorization| %>
+      <tr>
+        <td><%= authorization.user_id %></td>
+        <td><%= authorization.costcenter %></td>
+        <td><%= authorization.currency %></td>
+        <td><%= authorization.department %></td>
+        <td><%= authorization.expense %></td>
+        <td><%= authorization.supplier %></td>
+        <td><%= authorization.p_request %></td>
+        <td><%= authorization.p_order %></td>
+        <td><%= authorization.p_grn %></td>
+        <td><%= link_to 'Show', authorization %></td>
+        <td><%= link_to 'Edit', edit_authorization_path(authorization) %></td>
+        <td><%= link_to 'Destroy', authorization, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Authorization', new_authorization_path %>

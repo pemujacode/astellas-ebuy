@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  invoice_no: MyString
+  invoice_date: 2020-02-23
+  due_date: 2020-02-23
+  payment_no: MyString
+  currency: MyString
+  requester: MyString
+  approval1: MyString
+  apv_date1: 2020-02-23
+  approval2: MyString
+  apv_date2: 2020-02-23
+  approval3: MyString
+  apv_date3: 2020-02-23
+  approval4: MyString
+  apv_date4: 2020-02-23
+  remarks: MyString
+
+two:
+  invoice_no: MyString
+  invoice_date: 2020-02-23
+  due_date: 2020-02-23
+  payment_no: MyString
+  currency: MyString
+  requester: MyString
+  approval1: MyString
+  apv_date1: 2020-02-23
+  approval2: MyString
+  apv_date2: 2020-02-23
+  approval3: MyString
+  apv_date3: 2020-02-23
+  approval4: MyString
+  apv_date4: 2020-02-23
+  remarks: MyString

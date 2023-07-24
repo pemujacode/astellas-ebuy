@@ -1,0 +1,2 @@
+      invoke  active_record
+      remove    db/migrate/20210404231809_add_status_to_supplier.rb

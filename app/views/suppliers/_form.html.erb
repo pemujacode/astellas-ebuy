@@ -1,0 +1,148 @@
+
+<div class="card-body">
+
+ <% if supplier.errors.any? %>
+        <% supplier.errors.full_messages.each do |message| %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="close" data-dismiss="alert"></button>
+                <strong>Error: </strong><%=  message %>
+              </div>
+        <% end %>
+  <% end %>
+   
+  <%= simple_form_for @supplier,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+  <div class="row">
+
+
+    <!-- START LEFT SECTION -->
+    <div class="col-sm-6 d-flex flex-column">
+    
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header ">
+          <h5 class="text-complete pull-left fs-12">Supplier Master <i class="fa fa-circle text-complete fs-11"></i></h5>
+          
+          <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Supplier Code</label>
+            <div class="col-md-9">
+              <%= f.text_field :code , class: 'form-control', placeholder: 'Supplier Code',required: true %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Supplier Name</label>
+            <div class="col-md-9">
+              <%= f.text_field :name , class: 'form-control', placeholder: 'Supplier Name',required: true %>
+            </div>
+          </div>
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Printing Name</label>
+            <div class="col-md-9">
+              <%= f.text_field :printing_name , class: 'form-control', placeholder: 'Printing Name',required: true %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Address</label>
+            <div class="col-md-9">
+              <%= f.text_area :address , class: 'form-control', placeholder: 'Address',required: true %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">NPWP</label>
+            <div class="col-md-9">
+              <%= f.text_field :npwp , class: 'form-control', placeholder: 'NPWP',required: true %>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <!-- END LEFT SECTION -->
+
+
+    <!-- START RIGHT SECTION -->
+    <div class="col-sm-6  d-flex flex-column">
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header clearfix">
+        <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+          
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Contact Person</label>
+            <div class="col-md-9">
+              <%= f.text_field :pic , class: 'form-control', placeholder: 'Contact Person',required: true %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Email</label>
+            <div class="col-md-9">
+              <%= f.text_field :email , class: 'form-control', placeholder: 'PIC Email',required: true %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Phone</label>
+            <div class="col-md-9">
+              <%= f.text_field :phone , class: 'form-control', placeholder: 'Phone',required: true %>
+            </div>
+          </div>
+
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Currency</label>
+            <div class="col-md-9">
+              <select class="full-width" data-init-plugin="select2" placeholder = "Cost Center" name="supplier[currency_id]" id="supplier_currency_id">
+                <% @currencies = Currency.all
+                  @currencies.each do |currency| %>
+                  <option value="<%= currency.id %>"><%= currency.code  %></option>
+                   <% unless supplier.currency.nil? %>
+                      <option selected="selected"><%=  supplier.currency.code  %></option>
+                   <% end %>
+
+                <% end %>
+
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">VAT (%)</label>
+            <div class="col-md-9">
+              <%= f.text_field :vat , class: 'form-control', placeholder: 'VAT',required: true %>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- END RIGHT -->
+
+
+</div>
+
+  <div class="actions">
+    <%= f.submit 'submit' , :class => 'btn btn-primary btn-cons'  %>
+    <%= link_to 'Back', suppliers_path, :class => 'btn btn-complete btn-cons' %>
+
+  </div>
+
+
+<% end %>  
+ 
+
+  
+</div>
+
+

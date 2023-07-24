@@ -1,0 +1,52 @@
+
+<% content_for(:html_title) { 'Expense Type - Index' } %>
+
+<!-- START card -->
+<div class="card card-transparent">
+    <div class="card-header">
+     <div class="pull-left">
+       <%= link_to 'New Expense Type', new_expense_path, :class => 'btn btn-primary btn-cons' %>
+     </div>
+     <div class="pull-right">
+       <div class="col-xs-12">
+         <input type="text" id="search-table" class="form-control pull-right" placeholder="Search">
+       </div>
+     </div>
+     <div class="clearfix"></div>
+   </div>
+   <div class="card-body">
+     
+     <table class="table table-hover demo-table-search table-responsive-block" id="tableWithSearch">
+       <thead>
+         <tr>
+            <th>Code</th>
+            <th>Name</th>
+          <th>SAP GL account</th>
+           <th>Action</th>
+         </tr>
+       </thead>
+       <tbody>
+        <% @expenses.each do |expense| %>
+         <tr>
+         
+          <td class="v-align-middle semi-bold"><%= expense.code %></td>
+          <td class="v-align-middle"><%= expense.name %></td>
+          <td class="v-align-middle"><%= expense.gl_account %></td>
+          <td class="v-align-middle"><%= link_to 'Show', expense %> |
+          <%= link_to 'Edit', edit_expense_path(expense) %> |
+          <%= link_to 'Delete', expense, method: :delete, data: { confirm: 'Are you sure to Delete Expense ?'  } %></td>
+          
+         
+         
+         </tr>
+          <% end %>
+       </tbody>
+     </table>
+    
+   </div>
+</div>
+
+
+
+
+

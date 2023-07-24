@@ -1,0 +1,69 @@
+
+<% content_for(:html_title) { 'Purchase Order - Summary' } %>
+
+<!-- START card -->
+<div class="card card-transparent">
+    <div class="card-header">
+     <div class="pull-left">
+       <%= link_to 'New Purchase Order', new_purchase_order_path, :class => 'btn btn-primary btn-cons' %>
+     </div>
+     <div class="pull-right">
+       <div class="col-xs-12">
+         <input type="text" id="search-table" class="form-control pull-right" placeholder="Search">
+       </div>
+     </div>
+     <div class="clearfix"></div>
+   </div>
+   <div class="card-body">
+     
+     <table class="table table-hover table-responsive-block" id="tableWithSearch">
+       <thead>
+         <tr>
+          <th width='10%'>PO No.</th>
+          <th>Requester</th>
+          <th>PO Date</th>
+          <th>Supplier</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Action</th>
+
+         </tr>
+       </thead>
+       <tbody>
+         <% @purchase_orders.each do |purchase_order| %>
+         <tr>
+         
+          <td class="v-align-middle semi-bold"><%= purchase_order.sapno %></td>
+          <td class="v-align-middle"><%= purchase_order.buyer %></td>
+          <td class="v-align-middle"><%= purchase_order.po_date %></td>
+          <td class="v-align-middle"><%= purchase_order.supplier %></td>
+          <td class="v-align-middle"><%= purchase_order.prepared_by %></td>
+          <td class="v-align-middle"><%= purchase_order.status %></td>
+          
+          
+
+            
+        
+          <td class="v-align-middle"><%= link_to 'View', purchase_order %>
+             <% if current_user.email == purchase_order.prepared_by  %>
+              | <%= link_to 'Edit/Process', edit_purchase_order_path(purchase_order) %>
+             
+
+             <% end %>
+          </td>
+
+
+
+          
+        
+         
+         </tr>
+          <% end %>
+       </tbody>
+     </table>
+    
+   </div>
+</div>
+
+
+

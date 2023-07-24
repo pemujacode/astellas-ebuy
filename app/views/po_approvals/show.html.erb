@@ -1,0 +1,82 @@
+
+<% content_for(:html_title) { 'Purchase Order Approval Rule - View' } %>
+
+
+<div class=" container    container-fixed-lg">
+  <div class="card card-default m-t-20">
+    <div class="card-body">
+     <div class="invoice padding-50 sm-padding-10">
+        <div class="card-body">
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Approval ID :</strong></label>
+            <div class="col-md-9">
+             <%= @po_approval.id %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Buyer :</strong></label>
+            <div class="col-md-9">
+             <%= @po_approval.requester %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Reviewed By - Name : </strong></label>
+            <div class="col-md-9">
+             <%= @po_approval.apv1 %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Reviewed By - Treshold :</strong></label>
+            <div class="col-md-9">
+              <%= @po_approval.apv1_amount %>
+             
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Final Approval : </strong></label>
+            <div class="col-md-9">
+             <%= @po_approval.apv2 %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>Final Approval - Treshold :</strong></label>
+            <div class="col-md-9">
+              <%= @po_approval.apv2_amount %>
+             
+            </div>
+          </div>
+
+         
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label"><strong>is Active : </strong></label>
+            <div class="col-md-9">
+              <%= @po_approval.is_active %>
+            </div>
+          </div>
+
+
+        
+
+          <br>
+          <%= link_to 'Edit', edit_po_approval_path(@po_approval),:class => 'btn btn-complete btn-cons' %> 
+          <%= link_to 'Back', po_approvals_path, :class => 'btn btn-complete btn-cons' %>
+          
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

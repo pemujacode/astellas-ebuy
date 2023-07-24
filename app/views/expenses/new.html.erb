@@ -1,0 +1,11 @@
+
+<% content_for(:html_title) { 'Expense - New' } %>
+<div class="card card-default">
+
+	<%= render 'form', expense: @expense %>
+
+	<br>
+	<%= link_to 'Back', expenses_path, :class => 'btn btn-complete btn-cons' %>
+
+</div>
+<br>

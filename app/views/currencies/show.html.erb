@@ -1,0 +1,33 @@
+
+<% content_for(:html_title) { 'Currency - View : ' + @currency.code } %>
+
+
+<div class="card card-default">
+  <div class="card-body">
+   <%= simple_form_for @currency,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+   
+    <div class="form-group row">
+      <label for="fname" class="col-md-3 control-label">Currency Code</label>
+      <div class="col-md-9">
+        <%= f.text_field :name, value:@currency.code , class: 'form-control' , :disabled =>true %>
+      </div>
+    </div>
+
+
+    <div class="form-group row">
+      <label for="fname" class="col-md-3 control-label">Currency Name</label>
+      <div class="col-md-9">
+        <%= f.text_field :name, value:@currency.name , class: 'form-control' , :disabled =>true %>
+      </div>
+    </div>
+
+ 
+
+    <br>
+   <% end %>  
+
+  <%= link_to 'Edit', edit_currency_path(@currency), :class => 'btn btn-complete btn-cons' %> 
+  <%= link_to 'Back', currencies_path , :class => 'btn btn-complete btn-cons' %>
+
+  </div>
+</div>

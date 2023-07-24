@@ -1,0 +1,64 @@
+<% content_for(:html_title) { 'User - Profile' } %>
+
+
+<div class="card card-default">
+    
+	<div class="card-body">
+	 <%= simple_form_for @user,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+	 
+	  <div class="form-group row">
+	    <label for="fname" class="col-md-3 control-label">Email</label>
+	    <div class="col-md-9">
+	      <%= f.text_field :name, value:@user.email , class: 'form-control' , :disabled =>true %>
+	    </div>
+	  </div>
+
+      <div class="form-group row">
+	    <label for="fname" class="col-md-3 control-label">Name</label>
+	    <div class="col-md-9">
+	      <%= f.text_field :name, value:@user.name , class: 'form-control' , :disabled =>true %>
+	    </div>
+
+	  </div>
+	   <div class="form-group row">
+	    <label for="fname" class="col-md-3 control-label">Employee ID</label>
+	    <div class="col-md-9">
+	      <%= f.text_field :emp_id, value:@user.emp_id , class: 'form-control' , :disabled =>true %>
+	    </div>
+	  </div>
+
+	  <div class="form-group row">
+	    <label for="fname" class="col-md-3 control-label">Job Title</label>
+	    <div class="col-md-9">
+	      <%= f.text_field :title, value:@user.title , class: 'form-control' , :disabled =>true %>
+	    </div>
+	  </div>
+
+	  <div class="form-group row">
+	    <label for="fname" class="col-md-3 control-label">Department</label>
+	    <div class="col-md-9">
+	      <%= f.text_field :department_id, value:Department.find_by(id: @user.department_id).name , class: 'form-control' , :disabled =>true %>
+	    </div>
+	  </div>
+
+
+
+
+
+	 
+	  
+	  
+
+	  <br>
+	 <% end %>  
+
+	<%= link_to 'Edit', edit_user_path(@user), :class => 'btn btn-complete btn-cons' %> 
+    <%= link_to 'Back', user_path , :class => 'btn btn-complete btn-cons' %>
+    
+
+
+
+	</div>
+</div>
+
+

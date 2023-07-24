@@ -1,0 +1,488 @@
+
+
+<div class="card-body">
+
+ <% if purchase_request.errors.any? %>
+        <% purchase_request.errors.full_messages.each do |message| %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="close" data-dismiss="alert"></button>
+                <strong>Error: </strong><%=  message %>
+              </div>
+        <% end %>
+  <% end %>
+
+
+  <%= simple_form_for @purchase_request,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+  <div class="row">
+
+
+    <!-- START LEFT SECTION -->
+    <div class="col-sm-6 d-flex flex-column">
+    
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header ">
+          <h5 class="text-complete pull-left fs-12">Contents <i class="fa fa-circle text-complete fs-11"></i></h5>
+          
+          <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+
+      
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">PR Date</label>
+              <div class="col-md-9">
+              <%= f.text_field :request_date, value: @purchase_request.request_date.try(:strftime, '%d/%m/%Y') , id: 'datepicker-component', class: 'form-control', placeholder: 'DD/MM/YYYY',required: true, :'data-date-format' => 'dd/mm/yyyy', disabled: (true unless @purchase_request.status.nil? ) %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Requester Name</label>
+            <div class="col-md-6">
+              <%= f.text_field :requester, class: 'form-control', placeholder: 'Requester',  :disabled =>true  %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :account , class: 'form-control', placeholder: 'Account' , :disabled =>true  %>
+            </div>
+          </div>
+
+<div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approval Group</label>
+             <div class="col-md-9">
+                <% if @purchase_request.status.nil?   %> 
+                  <select class="full-width" data-init-plugin="select2" placeholder = "Group" name="purchase_request[approval_group]" id="group" onchange="getGroup(this.value)">
+                 
+                     <% @approval = PrApproval.where(requester: current_user.email)
+                        @approval.each do |supplier| %>
+                        <option value="<%= supplier.approval_group %>"><%= supplier.approval_group %></option>
+                        <% end %>
+
+                         <% unless @purchase_request.approval_group.nil? %>
+
+                          <option selected="selected"><%=  @purchase_request.approval_group %></option>
+                     
+                         <% end %>                      
+
+             
+                  </select>
+                <% else %>
+                           
+
+
+
+            </div>
+          </div>
+
+          
+
+         <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Department</label>
+             <div class="col-md-9">
+              <%= f.text_field :department , class: 'form-control', placeholder: 'Account' , :disabled =>true  %>
+            </div>
+          </div>
+
+          
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Order Type</label>
+            <div class="col-md-9">
+               <%= f.radio_button :is_newgoods, true, :checked => true, disabled: (true unless @purchase_request.status.nil?)  %>
+               <%= f.label :is_newgoods, "New Goods", :value => "true" %>
+
+               <%= f.radio_button :is_newgoods, false, disabled: (true unless @purchase_request.status.nil?) %>
+               <%= f.label :is_newgoods, "Re-Order", :value => "false" %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label class="col-md-3 control-label">Request Type</label>
+            <div class="col-md-9">
+            <% if @purchase_request.status.nil?  %> 
+                <select class="full-width" data-init-plugin="select2" placeholder = "Cost Center" name="purchase_request[costcenter]" id="purchase_request_costcenter">
+                  <% @costcenters = Costcenter.all
+                    @costcenters.each do |costcenter| %>
+                    <option value="<%= costcenter.name %>"><%= costcenter.name %></option>
+                    <% end %>
+                     <option selected="selected"></option>
+
+                     <% unless purchase_request.costcenter.nil? %>
+
+                      <option selected="selected"><%=  purchase_request.costcenter %></option>
+                 
+                     <% end %>
+           
+                </select>
+              <% else %>
+                <select disabled="disabled" class="full-width" data-init-plugin="select2" placeholder = "Cost Center" name="purchase_request[costcenter]" id="purchase_request_costcenter">
+                  <% @costcenters = Costcenter.all
+                    @costcenters.each do |costcenter| %>
+                    <option value="<%= costcenter.name %>"><%= costcenter.name %></option>
+                    <% end %>
+                     <option selected="selected"></option>
+
+                     <% unless purchase_request.costcenter.nil? %>
+
+                      <option selected="selected"><%=  purchase_request.costcenter %></option>
+                 
+                     <% end %>
+
+           
+                </select>
+
+              <% end %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Purpose</label>
+            <div class="col-md-9">
+              <%= f.text_area :purpose , class: 'form-control', placeholder: 'Purpose',required: true, disabled: (true unless @purchase_request.status.nil?) %>
+            </div>
+          </div>
+
+      
+
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Delivery Date</label>
+            <div class="col-md-9">
+              <%= f.text_field :required_date ,value: f.object.required_date.blank? ? '' : f.object.required_date.try(:strftime,'%d/%m/%Y') ,  id: 'datepicker-component', class: 'form-control', placeholder: 'DD/MM/YYYY',required: true, :'data-date-format' => 'dd/mm/yyyy', disabled: (true unless @purchase_request.status.nil?) %>
+            </div>
+          </div>
+
+
+          
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Supplier</label>
+            <div class="col-md-9">
+              <%= f.text_area :supplier , class: 'form-control', placeholder: 'Supplier',required: true, disabled: (true unless @purchase_request.status.nil?) %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Reason</label>
+            <div class="col-md-9">
+              <%= f.text_area :supplier_reason , class: 'form-control', placeholder: 'Reason for Supplier Selection',required: true, disabled: (true unless @purchase_request.status.nil?) %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-3 control-label">Allocation</label>
+            <div class="col-md-9">
+              <% if @purchase_request.status.nil?    %> 
+                  <select class="full-width" data-init-plugin="select2" placeholder = "Allocation" name="purchase_request[allocation]" id="purchase_request_allocation">
+                  
+                      <option value="Affiliate Budget (Planned)">Affiliate Budget (Planned)</option>
+                      <option value="Affiliate Budget (Unplanned)">Affiliate Budget (Unplanned)</option>
+                      <option value="API Budget (Planned)">API Budget (Planned)</option>
+                      <option value="API Budget (Special Applied)">API Budget (Special Applied)</option>
+                      <option value="SESA Budget">SESA Budget</option>
+                      
+                          
+
+                       <% unless purchase_request.allocation.nil? %>
+
+                        <option selected="selected"><%=  purchase_request.allocation %></option>
+                   
+                       <% end %>
+             
+                  </select>
+                <% else %>
+                   <select disabled="disabled" class="full-width" data-init-plugin="select2" placeholder = "Allocation" name="purchase_request[allocation]" id="purchase_request_allocation">
+                    
+                        <option value="Affiliate Budget (Planned)">Affiliate Budget (Planned)</option>
+                        <option value="Affiliate Budget (Unplanned)">Affiliate Budget (Unplanned)</option>
+                        <option value="API Budget (Planned)">API Budget (Planned)</option>
+                        <option value="API Budget (Special Applied)">API Budget (Special Applied)</option>
+                        <option value="SESA Budget">SESA Budget</option>
+                        
+                            
+
+                         <% unless purchase_request.allocation.nil? %>
+
+                          <option selected="selected"><%=  purchase_request.allocation %></option>
+                     
+                         <% end %>
+               
+                    </select>
+
+                <% end %>
+
+            </div>
+          </div>  
+
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Est. Amount</label>
+            <div class="col-md-9">
+              <%= f.text_field :price, :value => number_to_currency(f.object.price, unit: "", precision: 0) , class: 'form-control', placeholder: 'Estimated Price',required: true, disabled: (true unless @purchase_request.status.nil?) %>
+            </div>
+          </div>
+
+  
+
+        <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Attachment</label>
+            <div class="col-md-9">
+              <%= f.file_field :attachment1 , class: 'form-control', placeholder: 'Remarks', multiple: true, disabled: (true unless @purchase_request.status.nil?) %>
+              
+                <% @purchase_request.attachment1.each do |attachment1| %>
+                <div><%= link_to attachment1.filename, attachment1 %></div>
+               
+              <% end %>
+
+             
+            </div>
+          </div>
+
+
+
+
+
+        
+        </div>
+        
+      </div>
+    </div>
+    <!-- END LEFT SECTION -->
+
+
+    <!-- START RIGHT SECTION -->
+    <div class="col-sm-6  d-flex flex-column">
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header clearfix">
+          <h5 class="text-complete pull-left fs-12">Status and Approval <i class="fa fa-circle text-complete fs-11"></i></h5>
+        <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+          
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Status</label>
+            <div class="col-md-9">
+              <%= f.text_field :status , class: 'form-control', placeholder: 'Status' , :disabled =>true  %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Requester</label>
+            <div class="col-md-9">
+            <%= f.text_field :req_email ,  class: 'form-control', placeholder: 'Requester', :disabled =>true  %>
+
+            </div>
+          </div>
+
+
+<div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Reviewed By</label>
+            <div class="col-md-6">
+              <%= f.text_field :approval1 , class: 'form-control', placeholder: 'Reviewed By' , :disabled =>true , :id => 'Approval1' %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :apv_date1 , class: 'form-control', placeholder: 'Review Date' , :disabled =>true  , :id => 'Approval1' %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approver - Level 1</label>
+            <div class="col-md-6">
+              <%= f.text_field :approval2 , class: 'form-control', placeholder: 'Approver - Level 1' , :disabled =>true  , :id => 'Approval2'  %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :apv_date2 , class: 'form-control', placeholder: 'Approval Date' , :disabled =>true  , :id => 'Approval2' %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approver - Level 2</label>
+            <div class="col-md-6">
+              <%= f.text_field :approval3 , class: 'form-control', placeholder: 'Approver - Level 2' , :disabled =>true , :id => 'Approval3'  %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :apv_date3 , class: 'form-control', placeholder: 'Approval Date' , :disabled =>true , :id => 'Approval3'  %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approver - Final</label>
+            <div class="col-md-6">
+              <%= f.text_field :approval4 , class: 'form-control', placeholder: 'Approver - Final' , :disabled =>true , :id => 'Approval4' %>
+            </div>
+            <div class="col-md-3">
+              <%= f.text_field :apv_date4 , class: 'form-control', placeholder: 'Approval Date' , :disabled =>true , :id => 'Approval4' %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Procurement PIC</label>
+            <div class="col-md-9">
+              <%= f.text_field :pic , class: 'form-control', placeholder: 'Procurement PIC' , :disabled =>true  %>
+            </div>
+            
+          </div>
+
+
+
+
+
+      
+
+
+        </div>
+      </div>
+    </div>
+    <!-- END RIGHT -->
+
+  </div>
+  <% if @purchase_request.status.nil?  %>
+<%= link_to_add_row('Add Item', f, :purchase_request_items, class: 'btn btn-primary', disabled: (true unless @purchase_request.status.nil?) ) %>
+<% end %>
+
+<table  id="myTable" class="table table-hover" > 
+  <thead>
+    <tr>
+      <th width='5%'></th>
+      <th  width='15%'>Dept.</th>
+      <th  width='15%'>Purch.</th>
+      <th  width='15%'>Product</th>
+      <th  width='40%'>Description</th>
+      <th width='10%'>Qty</th>
+      </tr>
+  </thead>
+   <tbody class='fields'>
+      <%= f.simple_fields_for :purchase_request_items do |builder| %>
+
+
+        <%= render 'purchase_request_item', f: builder %>
+
+      <% end %>
+   </tbody>
+</table>
+
+ 
+<br>
+<hr>
+
+  <div class="actions">
+
+
+<% unless @purchase_request.id.nil?  %> 
+    <% 
+     @purchase_requests = PurchaseRequest.find_by_sql("SELECT * FROM purchase_requests WHERE (approval1 ='" + current_user.email + "' or approval2 ='" + current_user.email + "' or approval3 ='" + current_user.email + "' or approval4 ='" + current_user.email + "') and id=" + @purchase_request.id.to_s  + " and status NOT IN ('Approved','Rejected') ")
+     
+     %>
+     
+     <% if @purchase_requests.any?  %> 
+        <%= f.submit 'Approve' , :class => 'btn btn-primary btn-cons',name: "status", value: "Approved",data: { confirm: 'Are you sure to Approve this Purchase Request ?'  } %>
+        <%= f.submit 'Reject' , :class => 'btn btn-primary btn-cons',name: "status", value: "Rejected",data: { confirm: 'Are you sure to Reject this Purchase Request ?'  } %>
+   
+
+        
+     <% end %> 
+
+     <% 
+     @purchase_requests = PurchaseRequest.find_by_sql("SELECT * FROM purchase_requests WHERE id=" + @purchase_request.id.to_s + "")
+     
+     %>
+     
+     <% if @purchase_requests.any?  %> 
+       <%= link_to 'Preview', purchase_request , :class => 'btn btn-primary btn-cons'  %>
+        <% if current_user.role == 'Admin' && @purchase_request.status!='Rejected' %>
+
+        <%= f.submit 'Reject' , :class => 'btn btn-primary btn-cons',name: "status", value: "Rejected",data: { confirm: 'Are you sure to Reject this Payment Request ?'  } %>
+
+      <% end %>
+   
+
+     <% end %> 
+
+
+ <% else %> 
+      <%= f.submit 'Submit' , :class => 'btn btn-primary btn-cons'  %>
+      <%= link_to 'Back', url_for(:back)  , :class => 'btn btn-complete btn-cons' %>
+    
+ <% end %> 
+
+
+       
+
+ 
+
+
+
+
+  </div>
+
+
+<% end %>  
+ 
+
+  
+</div>
+<script>
+   function GetExpense(expense) {
+      
+       $.getJSON({
+          url : "/getExpense",
+          type : "get",
+          data : 'costcenter=' + expense,
+          success: function(obj) 
+          {
+            
+            if (obj == 0)  //if Emplo
+            {
+              $('#cbo_product').empty();
+              $('#cbo_product').append( $('<option></option>'));
+            }
+            else
+            {
+              $('#cbo_product').empty();
+              $('#cbo_product').append( $('<option><choose></option>'));
+         
+              jQuery.each(obj,function(i) 
+                {
+                $('#cbo_product').append( $('<option value="'+ obj[i].name +'">'+obj[i].name +'</option>'));
+                }
+              );
+            }
+          }
+       });
+    }; 
+
+function getGroup(group) {
+       requester = $('#purchase_request_req_email').val()
+       trans = "PRPAY"
+       $.getJSON({
+          //url : "/getGroup?group=" + group + "&requester=" + requester + "",
+          url : "/getGroup?group=" + group + "&requester=" + requester + "&trans=" + trans,
+          type : "get",
+          //data : 'group:' + group,
+          //data : 'requester:' + requester,
+          success: function(result) 
+          {
+
+
+            $('#Approval1').val(result.apv1);
+            $('#Approval2').val(result.apv2);
+            $('#Approval3').val(result.apv3);
+            $('#Approval4').val(result.apv4);
+            
+            
+          }
+       });
+    }; 
+
+</script>
+
+
+
+

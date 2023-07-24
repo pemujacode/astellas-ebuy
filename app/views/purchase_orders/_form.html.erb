@@ -1,0 +1,983 @@
+
+
+
+
+<div class="card-body">
+
+ <% if purchase_order.errors.any? %>
+        <% purchase_order.errors.full_messages.each do |message| %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="close" data-dismiss="alert"></button>
+                <strong>Error: </strong><%=  message %>
+              </div>
+        <% end %>
+  <% end %>
+
+
+  <%= simple_form_for @purchase_order,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+  <div class="row">
+
+
+    <!-- START LEFT SECTION -->
+    <div class="col-sm-6 d-flex flex-column">
+    
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header ">
+          <h5 class="text-complete pull-left fs-12">Contents <i class="fa fa-circle text-complete fs-11"></i></h5>
+          
+          <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+
+
+        <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Document Type</label>
+            <div class="col-md-7">
+              <%= link_to 'Item', new_purchase_order_path(:doctype => 'Item') , :class => 'btn btn-primary btn-cons',disabled: (true unless @purchase_order.status.nil?)  %>
+              <%= link_to 'Service', new_purchase_order_path(:doctype => 'Service') , :class => 'btn btn-primary btn-cons', disabled: (true unless @purchase_order.status.nil?)  %>
+            </div>
+              <div class="col-md-2">
+              <%= f.text_field :doctype , disabled: true, class: 'form-control', placeholder: 'DocType' %>
+            </div>
+        </div>
+
+      <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Web PO No</label>
+            <div class="col-md-6">
+              <%= f.text_field :id , class: 'form-control', placeholder: 'PO No',:disabled => true  %>
+            </div>
+              <div class="col-md-3">
+              <%= f.text_field :po_date , id: 'datepicker-component', class: 'form-control', placeholder: 'DD/MM/YYYY',required: true, :'data-date-format' => 'dd-mm-yyyy', disabled: (true unless @purchase_order.status.nil?) %>
+            </div>
+          </div>
+
+         
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">SAP PO No</label>
+            <div class="col-md-9">
+              <%= f.text_field :sapno , class: 'form-control', placeholder: 'SAP PO No',:disabled => true  %>
+            </div>
+          </div>
+
+
+
+
+          <div class="form-group row">
+            <label class="col-md-3 control-label">Currency</label>
+            <div class="col-md-9">
+              <% if @purchase_order.status.nil?   %> 
+                <select class="full-width" data-init-plugin="select2" placeholder = "Currency" name="purchase_order[currency]" id="purchase_order_currency">
+                
+
+                  <% @curr = Currency.all
+                    @curr.each do |currency| %>
+                    <option value="<%= currency.code %>"><%= currency.code %></option>
+                    <% end %>
+
+                     <% unless purchase_order.currency.nil? %>
+
+                      <option selected="selected"><%=  purchase_order.currency %></option>
+                 
+                     <% end %>                      
+
+           
+                </select>
+              <% else  %> 
+                <select disabled="disabled" class="full-width" data-init-plugin="select2" placeholder = "currency" name="purchase_order[currency]" id="purchase_order_currency">
+                  
+              <% @curr = Currency.all
+                    @curr.each do |currency| %>
+                    <option value="<%= currency.code %>"><%= currency.code %></option>
+                    <% end %>
+
+                     <% unless purchase_order.currency.nil? %>
+
+                      <option selected="selected"><%=  purchase_order.currency %></option>
+                 
+                     <% end %>                      
+
+             
+                  </select>
+              
+              <% end  %> 
+
+            </div>
+          </div>
+
+     <div class="form-group row">
+       <label for="fname" class="col-md-3 control-label">Delivery Date</label>
+          
+              <div class="col-md-9">
+              <%= f.text_field :delivery_date , id: 'datepicker-component', class: 'form-control', placeholder: 'DD/MM/YYYY',required: true, :'data-date-format' => 'dd-mm-yyyy', disabled: (true unless @purchase_order.status.nil?) %>
+            </div>
+          </div>
+      
+
+
+
+          <div class="form-group row">
+            <label class="col-md-3 control-label">Supplier</label>
+            <div class="col-md-9">
+            <% if @purchase_order.status.nil?  %> 
+                <select class="full-width" data-init-plugin="select2" placeholder = "Supplier" name="purchase_order[supplier]" id="cbo_supplier" onchange="RefreshVal(this.value)">
+               
+                  <% @suppliers = Supplier.where(is_active: 'true')
+
+                    @suppliers.each do |supplier| %>
+                    <option value="<%=   supplier.name %>"><%=  supplier.name %></option>
+                    <% end %>
+
+                     <% unless purchase_order.supplier.nil? %>
+
+                      <option selected="selected"><%=  purchase_order.supplier %></option>
+                      <% @purchase_order.supplier = purchase_order.supplier %>
+                 
+                     <% end %>                      
+
+           
+                </select>
+              <% else  %>
+
+                 <select disabled="disabled" class="full-width" data-init-plugin="select2" placeholder = "Supplier" name="purchase_order[supplier]" id="cbo_supplier" 
+               
+                  <% @suppliers = Supplier.where(is_active: 'true')
+                    @suppliers.each do |supplier| %>
+                    <option value="<%= supplier.name %>"><%= supplier.name %></option>
+                    <% end %>
+
+                     <% unless purchase_order.supplier.nil? %>
+
+                      <option selected="selected"><%=  purchase_order.supplier %></option>
+                 
+                     <% end %>                      
+
+           
+                </select>
+
+              <% end  %>
+
+              
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Address</label>
+            <div class="col-md-9">
+              <%= f.text_area :address ,id: 'txt_address', class: 'form-control', placeholder: 'Address',required: true, disabled: (true unless @purchase_order.status.nil?)  %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" id="lblAtt" class="col-md-3 control-label">Attention</label>
+            <div class="col-md-9">
+              <%= f.text_field :attn, id: 'txt_attention',  class: 'form-control', placeholder: 'Attention', disabled: (true unless @purchase_order.status.nil?)  %>
+            </div>
+            
+          </div>
+
+      
+          <div class="form-group row">
+            <label class="col-md-3 control-label">Buyer / Requester</label>
+            <div class="col-md-9">
+              <% if @purchase_order.status.nil?   %> 
+                <select class="full-width" data-init-plugin="select2" placeholder = "buyer" name="purchase_order[buyer]" id="purchase_order_buyer">
+                
+
+                  <% @buyer = User.all
+                    @buyer.each do |buyer| %>
+                    <option value="<%= buyer.name %>"><%= buyer.name %></option>
+                    <% end %>
+
+                     <% unless purchase_order.buyer.nil? %>
+
+                      <option selected="selected"><%=  purchase_order.buyer %></option>
+                 
+                     <% end %>                      
+
+           
+                </select>
+              <% else  %> 
+                <select disabled="disabled" class="full-width" data-init-plugin="select2" placeholder = "buyer" name="purchase_order[buyer]" id="purchase_order_buyer">
+                  
+
+                    <% @buyer = User.all
+                      @buyer.each do |buyer| %>
+                      <option value="<%= buyer.name %>"><%= buyer.name %></option>
+                      <% end %>
+
+                       <% unless purchase_order.buyer.nil? %>
+
+                        <option selected="selected"><%=  purchase_order.buyer %></option>
+                   
+                       <% end %>                      
+
+             
+                  </select>
+              
+              <% end  %> 
+
+            </div>
+          </div>
+
+
+
+      
+          
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Terms of Payment</label>
+            <div class="col-md-9">
+              <%= f.text_area :terms_payment , class: 'form-control', placeholder: 'Term of Payment',required: true, disabled: (true unless @purchase_order.status.nil?)  %>
+            </div>
+          </div>
+
+        
+
+       
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Remarks</label>
+            <div class="col-md-9">
+              <%= f.text_area :remarks , class: 'form-control', placeholder: 'Remarks',required: true, disabled: (true unless @purchase_order.status.nil?)  %>
+            </div>
+          </div>
+
+
+        <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Attachment</label>
+            <div class="col-md-9">
+              <%= f.file_field :attachment1 , class: 'form-control', placeholder: 'Remarks', multiple: true, disabled: (true unless @purchase_order.status.nil?) %>
+              
+                <% @purchase_order.attachment1.each do |attachment1| %>
+                <div><%= link_to attachment1.filename, attachment1 %></div>
+               
+              <% end %>
+
+             
+            </div>
+          </div>
+  
+        </div>
+        
+      </div>
+    </div>
+    <!-- END LEFT SECTION -->
+
+
+    <!-- START RIGHT SECTION -->
+    <div class="col-sm-6  d-flex flex-column">
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header clearfix">
+          <h5 class="text-complete pull-left fs-12">Status and Approval <i class="fa fa-circle text-complete fs-11"></i></h5>
+        <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+
+
+          
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Status</label>
+            <div class="col-md-9">
+              <%= f.text_field :status , class: 'form-control', placeholder: 'Status' , :disabled =>true  %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Prepared By</label>
+            <div class="col-md-9">
+              <%= f.text_field :prepared_by , class: 'form-control', placeholder: 'Prepared By' , :disabled =>true  %>
+            </div>
+          </div>
+          
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Reviewed By</label>
+            <div class="col-md-6">
+              <%= f.text_field :reviewed_by , class: 'form-control', placeholder: 'Reviewed By' , :disabled =>true  %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :review_date , class: 'form-control', placeholder: 'Reviewed Date' , :disabled =>true  %>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Approved By</label>
+            <div class="col-md-6">
+              <% if  @purchase_order.status.nil?  %>
+                <%= f.text_field :approved_by , class: 'form-control', placeholder: 'Approval 1' , :disabled =>true  %>
+              <% else %>
+                <%= f.text_field :approved_by , class: 'form-control', placeholder: 'Approval 1' , :disabled =>true, value:@purchase_order.approved_by  %>
+                   
+
+               <% end %>
+            </div>
+             <div class="col-md-3">
+              <%= f.text_field :apv_date , class: 'form-control', placeholder: 'Approval 1 Date' , :disabled =>true  %>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- END RIGHT -->
+
+  </div>
+
+ <% if @purchase_order.status.nil?  %>
+   <button onclick="ResetVal(this.value)" class="btn btn-primary btn-cons" type="button">Add Row</button>
+<% end %>
+
+
+
+
+   <% unless @purchase_order.status.nil?  %>
+<table  id="myTable" class="" > 
+  <% else %>
+
+<table  id="myTable" class="" > 
+  <% end %>
+
+  <thead>
+
+    <tr>
+      <th width='10%'>Dept.</th>
+      <th width='10%'>Purch.</th>
+      <th width='10%'>Product</th>
+      <th width='30%'>Description</th>
+      <th width='13%'>Price</th>
+      <th width='12%'>Qty</th>
+      <th width='15%'>Amount</th>
+      </tr>
+  </thead>
+   <tbody class='fields' class="table">
+    <% unless @purchase_order.status.nil?  %>
+          <%= f.simple_fields_for :purchase_order_items, f.object.purchase_order_items.order(:id) do |builder| %>
+            <%= render 'purchase_order_item', f: builder %>
+          <% end %>
+    <% else %>
+                
+      <tr>
+        <td width='10%'>
+            <select  class="full-width" data-init-plugin="select2" placeholder = "Dept" id="cbo_dept"
+         
+
+              <% @depts = Dept.all
+                 @depts.each do |dept| %>
+                 <option value="<%= dept.name %>"><%= dept.name %></option>
+              <% end %>
+                 <option selected="selected"></option>
+            </select>
+
+        </td>
+        <td>
+          <select  class="full-width" data-init-plugin="select2" placeholder = "Purch" id="cbo_purc"    
+              <% @cc = Costcenter.all
+                 @cc.each do |cc| %>
+                 <option value="<%= cc.name %>"><%= cc.name %></option>
+                 
+              <% end %>
+              <option selected="selected"></option>
+            </select>    
+        </td>
+        <td>
+          <select  class="full-width" data-init-plugin="select2" placeholder = "Prod" id="cbo_prod"    
+              <% @product = Product.all
+                 @product.each do |product| %>
+                 <option value="<%= product.name %>"><%= product.name %></option>
+
+              <% end %>
+              <option selected="selected"></option>
+            </select>    
+        </td>
+        <td>
+           <% if  params[:doctype] == 'Item'    %>
+           <select  class="full-width" data-init-plugin="select2" placeholder = "Description" id="txt_desc"
+              <% @expense = Expense.all
+                 @expense.each do |expense| %>
+                 <option value="<%= expense.name %>"><%= expense.name %></option>
+              <% end %>
+           <% else %>
+              <input id="txt_desc" class="form-control" placeholder="Description" type="text" />
+           <% end %>
+        </td>
+        <td>
+          <input  id="txt_harga" class="form-control" placeholder="Price" type="number" align="middle" />
+        </td>
+        <td>
+          <input id="txt_qty" class="form-control" placeholder="Qty" type="number" align="right" />
+        </td>
+        <td>
+          <input id="txt_linetotal" class="form-control" placeholder="Total" type="number" align="right" />
+        </td>
+      </tr>
+      <th colspan="8">
+        <input id="txt_spec" class="form-control" placeholder="Spesification" type="text"  />
+      </th>
+      <tr>
+        <td>Contents :</td>
+      </tr>
+    <% end %>
+    
+   </tbody>
+</table>
+ 
+<br>
+<div class="row">
+
+
+    <!-- START LEFT BELOW SECTION -->
+    <div class="col-sm-6 d-flex flex-column">
+    
+      
+    </div>
+    <!-- END LEFT BELOW SECTION -->
+
+
+   <!-- START RIGHT BELOW SECTION -->
+    <div class="col-sm-6  d-flex flex-column">
+      <div class="card social-card share  full-width m-b-10 no-border" data-social="item">
+        <div class="card-header clearfix">
+          
+        <div class="clearfix"></div>
+        </div>
+        <div class="card-description">
+          
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Sub Total</label>
+            <div class="col-md-9" align="right">
+              <%= f.text_field :subtotal,style: 'text-align: right',:value => number_to_currency(f.object.subtotal, unit: "", precision: 0) ,id: 'txt_subtotal', class: 'form-control' , :disabled =>true %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Disc.</label>
+            <div class="col-md-9" text-align="right">
+              <%= f.text_field :disc,style: 'text-align: right', :value => number_to_currency(f.object.disc, unit: "", precision: 0) ,id: 'txt_disc', class: 'form-control' , disabled: (true unless @purchase_order.status.nil?) %>
+            </div>
+          </div>
+
+           <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Total After Discount</label>
+            <div class="col-md-9" text-align="right">
+              <%= f.text_field :totbefdisc,style: 'text-align: right', :value => number_to_currency(f.object.totbefdisc, unit: "", precision: 0) ,id: 'txt_subtotaldisc', class: 'form-control' , :disabled =>true %>
+            </div>
+          </div>
+
+
+           <div class="form-group row">
+            <label for="fname" id="lblVat" class="col-md-3 control-label">VAT</label>
+            <div class="col-md-6">
+              <%= f.text_field :vat,style: 'text-align: right', :value => number_to_currency(f.object.vat, unit: "", precision: 0) ,:id => 'txt_Vat', class: 'form-control', :disabled =>true  %>
+            </div>
+             <div class="col-md-3">
+              <%= f.check_box :is_vat, :id => 'chkVat', value:@purchase_order.is_vat , checked: true ,disabled: (true unless @purchase_order.status.nil?), :label => 'VAT ?' %>
+            </div>
+
+
+          </div>
+
+
+          <div class="form-group row">
+            <label for="fname" class="col-md-3 control-label">Grand Total</label>
+            <div class="col-md-9">
+              <%= f.text_field :grand_total, style: 'text-align: right', :value => number_to_currency(f.object.grand_total, unit: "", precision: 0) ,id: 'txt_grandtotal', class: 'form-control' , :disabled =>true  %>
+            </div>
+          </div>
+
+
+         
+
+
+      
+
+        </div>
+      </div>
+    </div>
+    <!-- END BELOW RIGHT -->
+
+  </div>
+<hr>
+
+  <div class="actions">
+ 
+
+    <% unless @purchase_order.id.nil?  %> 
+        <!-- Update/Edit/Approve  -->
+
+         <% 
+          @purchase_orders = PurchaseOrder.find_by_sql("SELECT * FROM purchase_orders WHERE reviewed_by ='" + current_user.email + "' and (review_date is null) and id=" + @purchase_order.id.to_s  + " and status NOT IN ('Rejected','Approved','Closed') ")
+     
+         
+         %>
+  
+         <% if @purchase_orders.any?  %>
+
+
+               <%= f.submit 'Approve' , :class => 'btn btn-primary btn-cons',name: "status", value: "Approved",data: { confirm: 'Are you sure to Approve this Purchase Order ?'  } %>
+               <%= f.submit 'Reject' , :class => 'btn btn-primary btn-cons',name: "status", value: "Rejected",data: { confirm: 'Are you sure to Reject this Purchase Order ?'  } %>
+
+         <% else %> 
+
+             <% 
+              @purchase_orders = PurchaseOrder.find_by_sql("SELECT * FROM purchase_orders WHERE approved_by ='" + current_user.email + "' and (apv_date is null) and id=" + @purchase_order.id.to_s  + " and status NOT IN ('Rejected','Approved','Closed') ")
+         
+             
+             %>
+             <% if @purchase_orders.any?  %>
+
+
+               <%= f.submit 'Approve' , :class => 'btn btn-primary btn-cons',name: "status", value: "Approved",data: { confirm: 'Are you sure to Approve this Purchase Order ?'  } %>
+               <%= f.submit 'Reject' , :class => 'btn btn-primary btn-cons',name: "status", value: "Rejected",data: { confirm: 'Are you sure to Reject this Purchase Order ?'  } %>
+
+              <% else %> 
+
+
+              <% end %> 
+                    
+       
+         <% end %> 
+
+
+        <%= link_to 'Back', url_for(:back)  , :class => 'btn btn-complete btn-cons' %>
+        <%= link_to 'Preview', purchase_order , :class => 'btn btn-primary btn-cons'  %>
+
+      
+    <% else %>
+        <!-- New Mode  -->
+        <%= f.submit 'Submit' , :class => 'btn btn-primary btn-cons', :onclick => 'CheckVal()'  %>
+        <%= link_to 'Back', url_for(:back)  , :class => 'btn btn-complete btn-cons' %>
+      
+
+    <% end %> 
+   
+
+
+
+
+       
+
+
+
+
+
+  </div>
+
+
+<% end %>  
+ 
+
+  
+</div>
+
+
+
+
+<script>
+
+
+
+
+
+
+
+    $(document).on("change blur", "#txt_quantity", function() {
+        var price = $('#txt_price').val();
+        var qty = $('#txt_quantity').val();
+      
+    
+     
+        var total = price * qty; // gives the value for subtract from main value
+        //var discont = main - mult;
+        $('#txt_amount').val(total);
+        $('#txt_subtotal').val(total);
+        RefreshTotal(); 
+         
+    });
+
+     $(document).on("change blur", "#txt_qty", function() {
+        var price = $('#txt_harga').val();
+        var qty = $('#txt_qty').val();
+      
+    
+     
+        var total = price * qty; // gives the value for subtract from main value
+        //var discont = main - mult;
+        $('#txt_linetotal').val(total);
+        
+     
+         
+    });
+
+     $(document).on("change blur", "#txt_linetotal", function() {
+        var price = $('#txt_harga').val();
+        var qty = $('#txt_qty').val();
+      
+    
+     
+       
+        
+     
+         
+    });
+
+
+  
+    $(document).on('form', function(event){
+      var field = event.field;
+      var price = field.find('.txt_price');
+      var quantity = field.find('.txt_quantity');
+
+
+      $(".i_qty , .r_qty").change( function() {
+        var amt = parseFloat( RField.val() ) + parseFloat( IField.val() );
+        FField.val(Math.round(amt));
+      });
+    })
+
+
+     $(document).on("change blur", "#txt_disc", function() {
+    
+        RefreshTotal(); 
+         
+    });
+
+
+    function GetExpense(expense) {
+      
+       $.getJSON({
+          url : "/getExpense",
+          type : "get",
+          data : 'costcenter=' + expense,
+          success: function(obj) 
+          {
+            
+            if (obj == 0)  //if Emplo
+            {
+              $('#cbo_product').empty();
+              $('#cbo_product').append( $('<option></option>'));
+            }
+            else
+            {
+              $('#cbo_product').empty();
+              $('#cbo_product').append( $('<option><choose></option>'));
+         
+              jQuery.each(obj,function(i) 
+                {
+                $('#cbo_product').append( $('<option value="'+ obj[i].name +'">'+obj[i].name +'</option>'));
+                }
+              );
+            }
+          }
+       });
+    }; 
+
+
+    function RefreshVal(supplier) {
+      
+       $.ajax({
+          url : "/getsupplierinfo",
+          type : "get",
+          data : 'supplier_name=' + supplier,
+          success: function(result) 
+          {
+            var obj = JSON.parse(result.toString());
+            $('#txt_attention').val(obj.attention);
+            $('#txt_address').val(obj.address);
+          }
+       });
+    }; 
+
+
+  function  CheckVal(val) 
+  {
+     //Validasi
+     var Amount = Number($('#txt_subtotal').val()) ;
+     var Curr = $('#purchase_order_currency').val() 
+
+     if (Amount > 0)
+     {
+       if (Amount < 3000000 & Curr == 'IDR' ) 
+       {
+          alert("PO is below IDR 3 Million. You cannot create PO lower than 3 Million.");
+          
+          event.preventDefault();
+          
+       }
+     }
+     else
+     {
+       alert("You cannot create PO with Zero Amount");
+          
+          event.preventDefault();
+     }
+       
+     
+  }
+
+  function PushPO(val)
+  {
+    
+    
+
+      var table = document.getElementById("myTable");
+      for (var i = 4,row; row = table.rows[i]; i++)
+      {
+        //rows
+        for (var j = 0, col; col = row.cells[j]; j++)
+        {
+          //columns
+
+          valDesc = document.getElementById("myTable").rows[i].cells[3].children[0].value;
+          valPrice = Number(document.getElementById("myTable").rows[i].cells[4].children[0].value);
+          valQty = Number(document.getElementById("myTable").rows[i].cells[5].children[0].value);
+        
+          valDept = document.getElementById("myTable").rows[i].cells[0].children[0].value;
+          valPurch = document.getElementById("myTable").rows[i].cells[1].children[0].value;
+          valProd = document.getElementById("myTable").rows[i].cells[2].children[0].value;
+          valTotal = Number(document.getElementById("myTable").rows[i].cells[6].children[0].value);
+          valSpec = document.getElementById("myTable").rows[i].cells[7].children[0].value;
+        
+
+        }
+
+        
+        /*
+        $.ajax({
+          url : "/SetLineValue",
+          type : "get",
+          //data : 'description=' +  $('#txt_desc').val() +,'price=' +  $('#txt_harga').val(),
+          data : {description: valDesc , price: valPrice, product: valProd, purch: valPurch, total: valTotal, dept: valDept, quantity:  valQty, spesification: valSpec},
+          
+          success: function(obj) 
+          {
+             //Bersih-bersih
+            
+
+
+          }
+        })
+        */
+
+
+      }
+    
+  }
+
+
+  function  ResetVal(val) 
+  {
+    if ($('#txt_desc').val()== "")
+    {
+          alert("Description is Missing");
+    }
+    else
+    {
+     
+   
+       if ($('#txt_harga').val()== "")
+       {
+          alert("Price is Missing");
+       }
+     
+       else
+       {
+          if ($('#txt_qty').val()== "")
+          {
+            alert("quantity is Missing");
+          }
+          else
+          {
+            //document.getElementById("MyDesc").value =  $('#txt_desc').val();
+            valDesc = $('#txt_desc').val();
+            valPrice = Number($('#txt_harga').val());
+            valQty = Number($('#txt_qty').val());
+            
+            valDept = $('#cbo_dept').val();
+            valPurch = $('#cbo_purc').val();
+            valProd = $('#cbo_prod').val();
+            valTotal = Number($('#txt_linetotal').val());
+            valSpec  = $('#txt_spec').val();
+              //Bersih-bersih
+                $('#txt_desc').val('') ;
+                $('#txt_harga').val('') ;
+                $('#txt_qty').val('') ;
+                $('#txt_linetotal').val('') ;
+                $('#txt_spec').val('') ;
+          
+
+            
+            
+            $.ajax({
+              url : "/SetLineValue",
+              type : "get",
+              //data : 'description=' +  $('#txt_desc').val() +,'price=' +  $('#txt_harga').val(),
+              data : {description: valDesc , price: valPrice, product: valProd, purch: valPurch, total: valTotal, dept: valDept, quantity:  valQty, spesification: valSpec},
+              
+              success: function(obj) 
+              {
+                 //Bersih-bersih
+                $('#txt_desc').val('') ;
+                $('#txt_harga').val('') ;
+                $('#txt_qty').val('') ;
+                $('#txt_linetotal').val('') ;
+                $('#txt_spec').val('') ;
+          
+              
+
+
+              }
+
+           });
+           
+            
+              
+      
+              var table = document.getElementById("myTable");
+              var r = document.createElement("TR");
+              r.innerHTML = `<tr>
+                  <td>
+                    <input   id="txt_Dept" class="form-control" placeholder="Description" type="text" value=' ` +  valDept +    `' disabled />
+                  </td>
+                  <td>
+                    <input  id="txt_Purch" class="form-control" placeholder="Description" type="text" value=' ` +  valPurch +    `'  disabled/>
+                  </td>
+                  <td>
+                    <input   id="txt_Product" class="form-control" placeholder="Description" type="text" value=' ` +  valProd +    `' disabled/>
+                  </td>
+                  <td>
+                    <input id="txt_desc" class="form-control" placeholder="Description" type="text" value=' ` +  valDesc +    `' disabled/>
+                  </td>
+                  <td>
+                    <input id="txt_harga" class="form-control" placeholder="Price" type="number" align="right" value='` +  valPrice +    `' disabled/>
+                  </td>
+                  <td align="right">
+                    <input id="txt_qty" class="form-control" placeholder="Qty" type="number" align="right"  value='` +  valQty +    `' disabled />
+                  </td>
+                  <td align="right">
+                    <input id="txt_linetotal" class="form-control" placeholder="Total" type="number" align="right"  value='` +  valTotal +    `' disabled />
+                  </td>
+                </tr>
+
+                
+
+                    `
+
+              table.appendChild(r);
+
+              var table = document.getElementById("myTable");
+              var r = document.createElement("TR");
+              r.innerHTML = `
+                  
+                 <th colspan="8">
+                    <input id="txt_spec" class="form-control" placeholder="Spesification" type="text"  value='` +  valSpec +    `' disabled />
+                    </th>
+               
+              
+                </tr>
+
+                
+
+                    `
+
+              table.appendChild(r);
+
+
+
+
+
+          }
+          var TempTotal = 0;
+          TempTotal = $('#txt_subtotal').val();
+          $('#txt_subtotal').val( Number(TempTotal) +  Number(valTotal)) ;
+          
+          RefreshTotal();
+        }
+      }
+  };
+
+
+    function RefreshTotal() 
+    {
+      var subtotal,disc,vat,befdi,total = 0 ;
+      subtotal = $('#txt_subtotal').val() ;
+      disc = $('#txt_disc').val() ;
+      befdi = Number(subtotal) + Number(disc) ;
+      var $Check  = $('#chkVat').is(':checked');
+      if( $Check)
+      {
+        //VAT
+          if ($('#cbo_supplier').val() == '20062-10 VAYATOUR ,PT')
+          {
+            $('#txt_Vat').val(befdi*0.01); 
+            vat =  $('#txt_Vat').val();
+          }
+          else
+          {      
+            $('#txt_Vat').val(befdi*0.11); 
+            vat =  $('#txt_Vat').val();
+          }
+      }
+      else 
+      {
+        //Non VAT
+          $('#txt_Vat').val(0);
+          vat = 0;
+      }    
+
+      
+      $('#txt_disc').val(disc);
+      $('#txt_Vat').val(vat);
+      $('#txt_subtotal').val(subtotal);
+      $('#txt_subtotaldisc').val(befdi);
+      total = Number(befdi) + Number(vat) ;
+      $('#txt_grandtotal').val(total); 
+     
+         
+    }; 
+
+    $('#chkVat').on('click' , function()
+    {
+      var $Check  = $('#chkVat').is(':checked');
+      var subtotal = $('#txt_subtotal').val()
+      var disc = $('#txt_disc').val()
+      
+      if( $Check)
+      {
+        //VAT
+         if ($('#cbo_supplier').val() == '20062-10 VAYATOUR ,PT')
+          {
+            var subtotal = $('#txt_subtotal').val()
+            $('#txt_Vat').val(subtotal*0.01); 
+            RefreshTotal();
+          }
+          else
+          {
+            var subtotal = $('#txt_subtotal').val()
+            $('#txt_Vat').val(subtotal*0.11); 
+            RefreshTotal();
+          }
+      }
+      else 
+      {
+        //Non VAT
+          $('#txt_Vat').val(0);
+          RefreshTotal();
+      }    
+             
+      //$('#txt_Vat').html(text);
+    });
+
+        
+
+
+   </script>     
+
+
+
+

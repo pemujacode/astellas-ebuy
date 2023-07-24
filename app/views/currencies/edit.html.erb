@@ -1,0 +1,13 @@
+
+<% content_for(:html_title) { 'Currency - Edit' } %>
+
+<div class="card card-default">
+
+	<%= render 'form', currency: @currency %>
+
+	<br>
+	<%= link_to 'Show', @currency, :class => 'btn btn-complete btn-cons' %> 
+	<%= link_to 'Back', currencies_path, :class => 'btn btn-complete btn-cons' %>
+
+</div>
+<br>

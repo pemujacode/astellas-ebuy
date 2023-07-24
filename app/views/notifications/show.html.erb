@@ -1,0 +1,80 @@
+
+<div class="card-body">
+
+
+
+  <%= simple_form_for @notification,:html=> { role: 'form',class: 'form-horizontal' }  do |f| %>
+
+
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Doc Type.</label>
+    <div class="col-md-9">
+
+
+      <% if @notification.id.nil? %>
+      <select class="full-width" data-init-plugin="select2" placeholder = "Doc Type" name="notification[doc_type]" id="notification_doctype">
+
+        <option value="VIPR">Payment Request</option>
+        <option value="PO">Purchase Order</option>
+        <option value="PR">Purchase Request</option>
+        
+        
+
+           <% unless notification.id.nil? %>
+
+
+            <option selected="selected"><%=  notification.doc_type %></option>
+       
+           <% end %>
+ 
+      </select>
+      <% else %>
+
+          <%= f.text_field :doc_type , class: 'form-control', placeholder: 'Doc Typr',required: true , disabled: (true unless @notification.id.nil?) %>
+
+
+      <% end %>
+    
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Doc No</label>
+    <div class="col-md-9">
+      <%= f.text_field :doc_num , class: 'form-control', placeholder: 'Document Number',required: true , disabled: (true unless @notification.id.nil?) %>
+    </div>
+  </div>
+ 
+
+  <div class="form-group row">
+    <label for="fname" class="col-md-3 control-label">Email</label>
+    <div class="col-md-9">
+      <%= f.text_field :email , class: 'form-control', placeholder: 'Target Email',required: true , disabled: (true unless @notification.id.nil?) %>
+    </div>
+  </div>
+
+  
+
+
+  
+  <br>
+  <div class="actions">
+     <%= link_to 'Back', notifications_path, :class => 'btn btn-complete btn-cons' %>
+
+     </div>
+  
+  <br>
+
+</form>
+ 
+
+     <% end %>  
+
+
+
+</div>
+
+
+
+

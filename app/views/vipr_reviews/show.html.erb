@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @vipr_review.name %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @vipr_review.title %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @vipr_review.email %>
+</p>
+
+<p>
+  <strong>Plafond:</strong>
+  <%= @vipr_review.plafond %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @vipr_review.order %>
+</p>
+
+<%= link_to 'Edit', edit_vipr_review_path(@vipr_review) %> |
+<%= link_to 'Back', vipr_reviews_path %>

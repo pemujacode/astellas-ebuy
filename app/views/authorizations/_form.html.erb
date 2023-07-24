@@ -1,0 +1,21 @@
+
+<%= simple_form_for(@authorization) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.association :user %>
+    <%= f.input :costcenter %>
+    <%= f.input :currency %>
+    <%= f.input :department %>
+    <%= f.input :expense %>
+    <%= f.input :supplier %>
+    <%= f.input :p_request %>
+    <%= f.input :p_order %>
+    <%= f.input :p_grn %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

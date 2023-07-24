@@ -1,0 +1,52 @@
+
+<% content_for(:html_title) { 'Currency - Index' } %>
+
+<!-- START card -->
+<div class="card card-transparent">
+    <div class="card-header">
+     <div class="pull-left">
+       <%= link_to 'New Currency', new_currency_path, :class => 'btn btn-primary btn-cons' %>
+     </div>
+     <div class="pull-right">
+       <div class="col-xs-12">
+         <input type="text" id="search-table" class="form-control pull-right" placeholder="Search">
+       </div>
+     </div>
+     <div class="clearfix"></div>
+   </div>
+   <div class="card-body">
+     
+     <table class="table table-hover demo-table-search table-responsive-block" id="tableWithSearch">
+       <thead>
+         <tr>
+          <th>Code</th>
+          <th>Name</th>
+           <th>Action</th>
+         </tr>
+       </thead>
+       <tbody>
+        <% @currencies.each do |currency| %>
+         <tr>
+         
+          <td class="v-align-middle semi-bold"><%= currency.code %></td>
+          <td class="v-align-middle"><%= currency.name %></td>
+        
+          <td class="v-align-middle"><%= link_to 'Show', currency %> |
+          <%= link_to 'Edit', edit_currency_path(currency) %> |
+          <%= link_to 'Delete', currency, method: :delete, data: { confirm: 'Are you sure to Delete Currency ?'  } %></td>
+          
+         
+         
+         </tr>
+          <% end %>
+       </tbody>
+     </table>
+    
+   </div>
+</div>
+
+
+
+
+
+

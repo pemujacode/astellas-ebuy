@@ -1,0 +1,76 @@
+<tr>
+ 
+
+
+<td>
+    <% unless @dept.nil? %>
+     
+
+       <%= f.text_field :dept,:value => @vipr_item.dept , class: 'form-control', label: false , disabled: (true unless @vipr.status.nil? ) %>    
+
+    
+          <% end %>     
+
+   </td>
+ 
+   <td>
+  <% unless @costcenter.nil? %>
+      
+      <%= f.text_field :costcenter,:value => @vipr_item.costcenter , class: 'form-control', label: false , disabled: (true unless @vipr.status.nil? ) %>    
+
+    
+
+    <% end %>     
+
+   </td>
+
+    <td>
+    <% unless @product.nil? %>
+      
+           <%= f.text_field :product,:value => @vipr_item.product , class: 'form-control', label: false , disabled: (true unless @vipr.status.nil? ) %>    
+    
+
+    <% end %>    
+     
+   </td>
+
+
+      <% if  params[:doctype] == "" || params[:doctype] == 'Item' %>
+         <td><%= f.text_field :description, class: 'form-control', label: false , disabled: (true unless @vipr.status.nil? ) %></td>
+
+ 
+      <% else %>   
+         <td><%= f.text_field :description, class: 'form-control', label: false , disabled: (true unless @vipr.status.nil? ) %></td>
+
+      <% end %>    
+ 
+
+ 
+<% unless @vipr.status.nil? %>
+  <td><%= f.text_field :price,style: 'text-align: right',:value => number_to_currency(f.object.price, unit: "", precision: 2), id: 'txt_price' , class: 'autonumeric form-control' , label: false, disabled: (true unless @vipr.status.nil?) %></td>
+  <td><%= f.text_field :quantity,style: 'text-align: right',:value => number_to_currency(f.object.quantity, unit: "", precision: 2), id: 'txt_quantity' ,  class: 'form-control' , label: false, disabled: (true unless @vipr.status.nil? ) %></td>
+  <td><%= f.text_field :amount,style: 'text-align: right',:value => number_to_currency(f.object.amount, unit: "", precision: 2), id: 'txt_amount',  class: 'form-control', label: false, disabled: (true unless @vipr.status.nil?) %></td>
+<% else %>
+  <td><%= f.text_field :price, style: 'text-align: right',id: 'txt_price' , class: 'autonumeric form-control' , label: false, disabled: (true unless @vipr.status.nil?) %></td>
+  <td><%= f.text_field :quantity, style: 'text-align: right',id: 'txt_quantity' ,  class: 'form-control' , label: false, disabled: (true unless @vipr.status.nil? ) %></td>
+  <td><%= f.text_field :amount,style: 'text-align: right', id: 'txt_amount',  class: 'form-control', label: false, disabled: (true unless @vipr.status.nil?) %></td>
+
+<% end %>
+
+
+  <td><%=f.input :no, :input_html => { :value => @vipr.no } ,class: 'form-control', label: false ,as: :hidden %></td>
+     
+</tr>
+<th valign="baseline">
+  <%= f.label :spec, 'Spesification' %>
+</th>
+<th colspan="8">
+  
+  <%= f.text_field :spesification, id: 'txt_specs' , class: 'form-control' , label: false, disabled: (true unless @vipr.status.nil?), placeholder: 'Spesification' %>
+
+</th>
+
+
+
+
+

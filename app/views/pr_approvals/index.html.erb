@@ -1,0 +1,58 @@
+
+
+<% content_for(:html_title) { 'Purchase Request Approval - Summary' } %>
+
+<!-- START card -->
+<div class="card card-transparent">
+    <div class="card-header">
+     <div class="pull-left">
+       <%= link_to 'New PR Approval', new_pr_approval_path, :class => 'btn btn-primary btn-cons' %>
+     </div>
+     <div class="pull-right">
+       <div class="col-xs-12">
+         <input type="text" id="search-table" class="form-control pull-right" placeholder="Search">
+       </div>
+     </div>
+     <div class="clearfix"></div>
+   </div>
+   <div class="card-body">
+     
+     <table class="table table-hover table-responsive-block" id="tableWithSearch">
+       <thead>
+         <tr>
+          <th>Requester</th>
+          <th>Apv1</th>
+          <th>Apv2</th>
+          <th>Is active</th>
+          <th>Action</th>
+
+         </tr>
+       </thead>
+       <tbody>
+         <% @pr_approvals.each do |pr_approval| %>
+         <tr>
+         
+          <td class="v-align-middle semi-bold"><%= pr_approval.requester %></td>
+          <td class="v-align-middle"><%=  pr_approval.apv1 %></td>
+         
+          <td class="v-align-middle"><%= pr_approval.apv2 %></td>
+         
+          <td class="v-align-middle"><%= pr_approval.is_active %></td>
+          
+          
+
+        
+          <td class="v-align-middle"><%= link_to 'Show', pr_approval %> | <%= link_to 'Edit', edit_pr_approval_path(pr_approval) %> |
+          <%= link_to 'Delete', pr_approval, method: :delete, data: { confirm: 'Are you sure to PR Approval ?'  } %></td>
+          
+        
+         
+         </tr>
+          <% end %>
+       </tbody>
+     </table>
+    
+   </div>
+</div>
+
+

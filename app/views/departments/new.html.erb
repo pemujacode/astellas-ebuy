@@ -1,0 +1,10 @@
+<% content_for(:html_title) { 'Department - New' } %>
+<div class="card card-default">
+
+	<%= render 'form', department: @department %>
+
+	<br>
+	<%= link_to 'Back', departments_path, :class => 'btn btn-complete btn-cons' %>
+
+</div>
+<br>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    Hi, <%= @purchase_request.req_email %>
+    <br>
+    <p>We're very sorry to inform you that Purchase Request No <%= @no %> is rejected by your superior ! </p>
+    <p>You can access this Purchase Request through following URL: <%= link_to @no, @url %>. </p>
+    </p>
+    <br>
+   
+    <p>Thanks and have a great day!</p>
+    <br>
+    
+
+    <p>=================================================================================</p>
+    <p>Notes : This is automatic email sent by PT Astellas Pharma Indonesia Purchase System. No reply is required</p>
+
+
+  </body>
+</html>
